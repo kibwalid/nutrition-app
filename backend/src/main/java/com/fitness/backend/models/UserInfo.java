@@ -18,7 +18,6 @@ public class UserInfo {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserLogin userLogin;
-    private String teamKey;
     private String firstName;
     private String lastName;
     private String email;

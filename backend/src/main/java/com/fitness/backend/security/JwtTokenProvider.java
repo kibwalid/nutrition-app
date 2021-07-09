@@ -52,7 +52,6 @@ public class JwtTokenProvider {
 
         Map<String, String> map = new HashMap<>();
         map.put("userID", String.valueOf(userInfo.getId()));
-        map.put("teamKey", userInfo.getTeamKey());
         map.put("token", Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//

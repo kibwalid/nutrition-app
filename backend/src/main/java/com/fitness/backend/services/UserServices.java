@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +41,8 @@ public class UserServices {
     public Map<String, String> registerUser(UserInfo userInfo) {
         if(!(userLoginRepository.existsByUsername(userInfo.getUserLogin().getUsername()) ||
                 userInfoRepository.existsByEmail(userInfo.getEmail()))){
-
-            userInfo.getUserLogin().setPassword(passwordEncoder.encode(userInfo.getUserLogin().getPassword()));
+            String hashedPassword = BCrypt.hashpw(userInfo.getUserLogin().getPassword(), BCrypt.gensalt(10));
+            userInfo.getUserLogin().setPassword(hashedPassword);
             UserInfo user = userInfoRepository.saveAndFlush(userInfo);
             return jwtTokenProvider.createToken(user);
         }else {
@@ -52,12 +53,13 @@ public class UserServices {
 
     public Map<String, String> validateUser(UserLogin userLogin) {
         try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin.getUsername(), userLogin.getPassword()));
             UserInfo userInfo = userInfoRepository.findByUsername(userLogin.getUsername());
-            System.out.println(userInfo);
+            if(!BCrypt.checkpw(userLogin.getPassword(), userInfo.getUserLogin().getPassword())){
+                throw new AppException("Invalid password, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
+            }
             return jwtTokenProvider.createToken(userInfo);
-        }catch (AuthenticationServiceException e){
-            throw new AppException("Invalid username/password, Please try again.", HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (Exception e) {
+            throw new AppException("Invalid username, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

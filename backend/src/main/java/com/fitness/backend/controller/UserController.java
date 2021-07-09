@@ -39,5 +39,19 @@ public class UserController {
         return new ResponseEntity<>(userServices.refreshToken(id), HttpStatus.OK);
     }
 
+    @PutMapping("/update/info")
+    public UserInfo updateUserInfo(@RequestBody UserInfo userInfo){
+        return userServices.updateUserInfo(userInfo); }
+
+    @PutMapping("/update/password")
+    public ResponseEntity<Map<String, String>> updatePassword(@RequestBody Map<String, String> changePassInfo){
+        return new ResponseEntity<>(userServices.changePassword(changePassInfo), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable int id){
+        return new ResponseEntity<>(userServices.deleteUser(id), HttpStatus.OK);
+    }
+
 
 }
