@@ -52,11 +52,11 @@ public class UserServices {
         try{
             UserInfo userInfo = userInfoRepository.findByUsername(userLogin.getUsername());
             if(!BCrypt.checkpw(userLogin.getPassword(), userInfo.getUserLogin().getPassword())){
-                throw new AppException("Invalid password, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
+                throw new AppException("Invalid username/password, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
             }
             return jwtTokenProvider.createToken(userInfo);
         } catch (Exception e) {
-            throw new AppException("Invalid username, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new AppException("Invalid username/password, please try again!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

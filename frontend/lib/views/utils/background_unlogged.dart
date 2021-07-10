@@ -36,7 +36,7 @@ class BackgroundUnlogged extends StatelessWidget {
           alignment: Alignment.center,
           children: <Widget>[
             Positioned(
-              bottom: size.height * 0.5,
+              bottom: size.height * 0.525,
               left: 0,
               child: Image.asset(
                 "assets/images/bg1.png",
