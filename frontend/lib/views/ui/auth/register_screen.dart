@@ -1,5 +1,6 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/user_info.dart';
+import 'package:fitness/services/native_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:flutter/material.dart';
@@ -14,163 +15,166 @@ class RegisterScreen extends StatelessWidget {
 
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
+        headerText: "Register",
+        leading: BackButton(
+          color: primaryColor,
+        ),
         child: SingleChildScrollView(
-      child: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              child: Text(
-                'Register to Fitness!',
-                style: TextStyle(
-                  color: primaryTextColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 30,
-              ),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: <Widget>[
-                    InputTextField(
-                      label: 'First Name',
-                      onSaved: (value) {
-                        userInfo.firstName = value;
-                      },
-                      validator: (value) {
-                        if (value.length == 0) return ("Username is required");
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InputTextField(
-                      label: 'Last Name',
-                      onSaved: (value) {
-                        userInfo.lastName = value;
-                      },
-                      validator: (value) {
-                        if (value.length == 0) return ("Username is required");
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InputTextField(
-                      label: 'Email',
-                      onSaved: (value) {
-                        userInfo.email = value;
-                      },
-                      validator: (value) {
-                        if (value.length == 0) return ("Username is required");
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InputTextField(
-                      label: 'Phone Number',
-                      onSaved: (value) {
-                        userInfo.phoneNum = value;
-                      },
-                      validator: (value) {
-                        if (value.length == 0) return ("Username is required");
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InputTextField(
-                      label: 'Username',
-                      onSaved: (value) {
-                        userInfo.userLogin.username = value;
-                        userInfo.username = value;
-                      },
-                      validator: (value) {
-                        if (value.length == 0) return ("Username is required");
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    InputTextField(
-                      label: 'Password',
-                      password: true,
-                      validator: (value) {
-                        if (value.length == 0) return ("Password is required");
-                      },
-                      onSaved: (value) {
-                        userInfo.userLogin.password = value;
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(36),
-                ),
-                color: primaryColor,
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
-                    userInfo.userLogin.roles = ['ROLE_USER'];
-                    print(userInfo.toJson());
-                  }
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Register',
-                    style: TextStyle(
-                      color: Colors.white,
+          child: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 30,
+                  ),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: <Widget>[
+                        InputTextField(
+                          label: 'First Name',
+                          onSaved: (value) {
+                            userInfo.firstName = value;
+                          },
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Username is required");
+                          },
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        InputTextField(
+                          label: 'Last Name',
+                          onSaved: (value) {
+                            userInfo.lastName = value;
+                          },
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Username is required");
+                          },
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        InputTextField(
+                          label: 'Email',
+                          onSaved: (value) {
+                            userInfo.email = value;
+                          },
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Username is required");
+                          },
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        InputTextField(
+                          label: 'Phone Number',
+                          onSaved: (value) {
+                            userInfo.phoneNum = value;
+                          },
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Username is required");
+                          },
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        InputTextField(
+                          label: 'Username',
+                          onSaved: (value) {
+                            userInfo.userLogin.username = value;
+                            userInfo.username = value;
+                          },
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Username is required");
+                          },
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        InputTextField(
+                          label: 'Password',
+                          password: true,
+                          validator: (value) {
+                            if (value.length == 0)
+                              return ("Password is required");
+                          },
+                          onSaved: (value) {
+                            userInfo.userLogin.password = value;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 16,
-              ),
-              alignment: Alignment.center,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/");
-                },
-                child: RichText(
-                  text: TextSpan(
-                      style: TextStyle(color: Colors.black38),
-                      children: [
-                        TextSpan(text: 'Already have an account? '),
-                        TextSpan(
-                          text: 'Login',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ]),
+                SizedBox(
+                  height: size.height * 0.02,
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
-    ));
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(36),
+                    ),
+                    color: primaryColor,
+                    onPressed: () async {
+                      if (formKey.currentState.validate()) {
+                        formKey.currentState.save();
+                        bool register =
+                            await NativeServices().register(userInfo);
+                        if (register) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false);
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 16,
+                  ),
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/");
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                          style: TextStyle(color: Colors.black38),
+                          children: [
+                            TextSpan(text: 'Already have an account? '),
+                            TextSpan(
+                              text: 'Login',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }

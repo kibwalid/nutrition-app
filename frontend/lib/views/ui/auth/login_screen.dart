@@ -1,4 +1,6 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/models/user_info.dart';
+import 'package:fitness/services/native_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String username = "";
-    String password = "";
+    UserLogin userLogin = UserLogin();
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
         child: SingleChildScrollView(
@@ -39,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                     InputTextField(
                       label: 'Username',
                       onSaved: (value) {
-                        username = value;
+                        userLogin.username = value;
                       },
                       validator: (value) {
                         if (value.length == 0) return ("Username is required");
@@ -55,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                         if (value.length == 0) return ("Password is required");
                       },
                       onSaved: (value) {
-                        password = value;
+                        userLogin.password = value;
                       },
                     ),
                   ],
@@ -72,10 +73,11 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(36),
                 ),
                 color: primaryColor,
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState.validate()) {
                     formKey.currentState.save();
-                    print(username);
+                    bool login = await NativeServices().login(userLogin);
+                    print(login);
                   }
                 },
                 child: Container(

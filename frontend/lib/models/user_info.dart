@@ -70,4 +70,9 @@ class UserLogin {
         "roles": List<dynamic>.from(roles.map((x) => x)),
         "username": username,
       };
+
+  Map<String, dynamic> toLoginData() => {
+        "password": password,
+        "username": username,
+      };
 }

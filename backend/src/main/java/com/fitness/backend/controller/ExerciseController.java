@@ -1,6 +1,8 @@
 package com.fitness.backend.controller;
 
 import com.fitness.backend.models.ExerciseInfo;
+import com.fitness.backend.services.ExerciseServices;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,29 +13,36 @@ import java.util.Map;
 @RequestMapping("/api/exercise")
 public class ExerciseController {
 
+    private final ExerciseServices exerciseServices;
+
+    public ExerciseController(ExerciseServices exerciseServices) {
+        this.exerciseServices = exerciseServices;
+    }
+
+
     @PostMapping("/")
     public ExerciseInfo addExerciseInfo(@RequestBody ExerciseInfo exerciseInfo){
-        return null;
+        return exerciseServices.addExerciseInfo(exerciseInfo);
     }
 
     @GetMapping("/{id}")
     public ExerciseInfo getExerciseInfo(@PathVariable int id){
-        return null;
+        return exerciseServices.getExerciseInfo(id);
     }
 
     @GetMapping("/all/{userID}")
     public List<ExerciseInfo> getAllExerciseInfoOfUser(@PathVariable int userID){
-        return null;
+        return exerciseServices.getAllExerciseInfoOfUser(userID);
     }
 
-    @PutMapping("/{id}")
-    public ExerciseInfo editExerciseInfo(@PathVariable int id){
+    @PutMapping("/")
+    public ExerciseInfo editExerciseInfo(@RequestBody ExerciseInfo exerciseInfo){
         return null;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteExerciseInfo(@PathVariable int id){
-        return null;
+        return new ResponseEntity<>(exerciseServices.deleteExerciseInfo(id), HttpStatus.OK);
     }
 
 

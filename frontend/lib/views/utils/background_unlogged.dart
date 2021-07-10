@@ -17,7 +17,7 @@ class BackgroundUnlogged extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(
