@@ -1,6 +1,6 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/user_info.dart';
-import 'package:fitness/services/native_services.dart';
+import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:flutter/material.dart';
@@ -126,11 +126,22 @@ class RegisterScreen extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                        bool register =
-                            await NativeServices().register(userInfo);
+                        bool register = await UserServices().register(userInfo);
                         if (register) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (Route<dynamic> route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              '/dashboard', (Route<dynamic> route) => false);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.error,
+                                  color: Colors.white,
+                                ),
+                                new Text("     Username already taken")
+                              ],
+                            ),
+                          ));
                         }
                       }
                     },

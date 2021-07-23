@@ -2,7 +2,7 @@ import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/user_info.dart';
 import 'package:fitness/services/api_services.dart';
 
-class NativeServices {
+class UserServices {
   Future<bool> login(UserLogin userLogin) async {
     Map<String, dynamic> response =
         await Api().post(userLogin.toLoginData(), "$API_URI/api/user/login");

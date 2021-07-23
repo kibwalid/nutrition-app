@@ -1,13 +1,12 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/user_info.dart';
-import 'package:fitness/services/native_services.dart';
+import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     UserLogin userLogin = UserLogin();
@@ -68,8 +67,24 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                        bool login = await NativeServices().login(userLogin);
-                        print(login);
+                        bool login = await UserServices().login(userLogin);
+                        if (login) {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              '/dashboard', (Route<dynamic> route) => false);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.error,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                    "    Incorrect username/password, Please try again")
+                              ],
+                            ),
+                          ));
+                        }
                       }
                     },
                     child: Container(
