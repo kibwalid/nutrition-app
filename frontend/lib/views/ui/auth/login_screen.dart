@@ -1,14 +1,19 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/models/auth_info.dart';
 import 'package:fitness/models/user_info.dart';
+import 'package:fitness/providers/user_provider.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends HookWidget {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final authInfo = useProvider(authInfoProvider);
     UserLogin userLogin = UserLogin();
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
@@ -67,8 +72,9 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                        bool login = await UserServices().login(userLogin);
-                        if (login) {
+                        var data = await UserServices().login(userLogin);
+                        authInfo.state = data;
+                        if (authInfo.state != null) {
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
                         } else {
