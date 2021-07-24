@@ -72,7 +72,10 @@ class Dashboard extends HookWidget {
                                   DashboardCard(
                                     title: "Running Tracker",
                                     imgSrc: "assets/icons/run.png",
-                                    press: () {},
+                                    press: () {
+                                      Navigator.pushNamed(
+                                          context, "/track/running");
+                                    },
                                   ),
                                   DashboardCard(
                                     title: "BMI Calculator",

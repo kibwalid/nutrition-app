@@ -1,18 +1,18 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SideDrawer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    _onload() async {
-      return 1;
-    }
+    final authInfo = useProvider(authInfoProvider);
 
     return FutureBuilder(
-        future: _onload(),
+        future: UserServices().getCurrentUserInfo(authInfo.state),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Drawer(
@@ -39,7 +39,7 @@ class SideDrawer extends HookWidget {
                               alignment:
                                   Alignment.centerLeft + Alignment(0, .4),
                               child: new Text(
-                                "Khalid Ibnul",
+                                "${snapshot.data.firstName} ${snapshot.data.lastName}",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 20.0),
                               ),
@@ -48,7 +48,7 @@ class SideDrawer extends HookWidget {
                           Align(
                             alignment: Alignment.centerLeft + Alignment(0, .7),
                             child: new Text(
-                              "@username",
+                              "@${snapshot.data.username}",
                               style: TextStyle(
                                 color: Colors.black87,
                               ),
@@ -90,15 +90,17 @@ class SideDrawer extends HookWidget {
                     ListTile(
                         title: Text('Logout'),
                         leading: Icon(Icons.exit_to_app),
-                        onTap: () {}),
+                        onTap: () {
+                          authInfo.state = null;
+                        }),
                   ],
                 ),
               ),
             );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error);
+            return Center(child: Text(snapshot.error));
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         });
   }

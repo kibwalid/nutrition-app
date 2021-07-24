@@ -27,7 +27,13 @@ dependencies:
   flutter_hooks: 
   flutter_native_splash: ^1.2.0
   http: ^0.13.3
-  flutter_svg: 
+  flutter_svg:
+  intl: ^0.17.0
+  google_maps_flutter: ^0.5.28
+  location:
+  latlng:
+  permission_handler:
+  background_locator:
 
 flutter_native_splash:
   color: "#ba6750"
