@@ -1,5 +1,6 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/location_services.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -91,7 +92,7 @@ class SideDrawer extends HookWidget {
                         title: Text('Logout'),
                         leading: Icon(Icons.exit_to_app),
                         onTap: () {
-                          authInfo.state = null;
+                          LocationServices().resetLocationService();
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/', (Route<dynamic> route) => false);
                         }),

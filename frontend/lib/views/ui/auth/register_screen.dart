@@ -1,5 +1,6 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/user_info.dart';
+import 'package:fitness/providers/running_tracker_providers.dart';
 import 'package:fitness/providers/user_provider.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
@@ -17,7 +18,8 @@ class RegisterScreen extends HookWidget {
     userInfo.userLogin = UserLogin();
 
     Size size = MediaQuery.of(context).size;
-    final authInfo = useProvider(authInfoProvider);
+    final authInfo = context.read(authInfoProvider);
+    final tracker = context.read(trackerStateProvider);
     return BackgroundUnlogged(
         headerText: "Register",
         leading: BackButton(
@@ -130,9 +132,10 @@ class RegisterScreen extends HookWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
-                        authInfo.state =
-                            await UserServices().register(userInfo);
-                        if (authInfo.state != null) {
+                        var data = await UserServices().register(userInfo);
+                        authInfo.state = data;
+                        tracker.state.currentLocation = data.loggedLocation;
+                        if (authInfo.state != null && data != null) {
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
                         } else {

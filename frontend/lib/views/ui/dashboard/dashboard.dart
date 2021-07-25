@@ -1,4 +1,6 @@
+import 'package:fitness/providers/running_tracker_providers.dart';
 import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/location_services.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/ui/dashboard/utils/dashboard_card.dart';
 import 'package:fitness/views/utils/background.dart';
@@ -11,6 +13,8 @@ class Dashboard extends HookWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final authInfo = context.read(authInfoProvider);
+    final tracker = context.read(trackerStateProvider);
+    final actionState = useProvider(actionStateProvider);
     return FutureBuilder(
         future: UserServices().getCurrentUserInfo(authInfo.state),
         builder: (context, snapshot) {
@@ -70,9 +74,25 @@ class Dashboard extends HookWidget {
                                     press: () {},
                                   ),
                                   DashboardCard(
-                                    title: "Running Tracker",
+                                    title: () {
+                                      if (!actionState.state) {
+                                        return "Running Tracker";
+                                      } else {
+                                        return "Continue Run";
+                                      }
+                                    }(),
                                     imgSrc: "assets/icons/run.png",
                                     press: () {
+                                      if (actionState.state == null) {
+                                        actionState.state = true;
+                                      } else if (!actionState.state) {
+                                        actionState.state = true;
+                                      }
+                                      if (tracker.state.counter < 1) {
+                                        LocationServices()
+                                            .getLocationForTracking();
+                                        LocationServices().startLocator();
+                                      }
                                       Navigator.pushNamed(
                                           context, "/track/running");
                                     },

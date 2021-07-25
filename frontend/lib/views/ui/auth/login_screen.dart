@@ -1,6 +1,7 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/auth_info.dart';
 import 'package:fitness/models/user_info.dart';
+import 'package:fitness/providers/running_tracker_providers.dart';
 import 'package:fitness/providers/user_provider.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
@@ -13,7 +14,8 @@ class LoginScreen extends HookWidget {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final authInfo = useProvider(authInfoProvider);
+    final authInfo = context.read(authInfoProvider);
+    final tracker = context.read(trackerStateProvider);
     UserLogin userLogin = UserLogin();
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
@@ -72,9 +74,18 @@ class LoginScreen extends HookWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Row(
+                            children: <Widget>[
+                              CircularProgressIndicator(),
+                              Text("    Logging in...")
+                            ],
+                          ),
+                        ));
                         var data = await UserServices().login(userLogin);
                         authInfo.state = data;
-                        if (authInfo.state != null) {
+                        tracker.state.currentLocation = data.loggedLocation;
+                        if (authInfo.state != null && data != null) {
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
                         } else {

@@ -1,8 +1,10 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/providers/running_tracker_providers.dart';
 import 'package:fitness/services/location_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong/latlong.dart';
 import 'package:fitness/views/utils/rounded_button.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ class RunningTracker extends HookWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final tracker = useProvider(trackerStateProvider);
     return Background(
       leading: BackButton(
         color: Colors.black,
@@ -149,7 +152,7 @@ class RunningTracker extends HookWidget {
                     minZoom: 12,
                     maxZoom: 18,
                     zoom: 18,
-                    center: LatLng(23.8103, 90.4125),
+                    center: tracker.state.currentLocation,
                   ),
                   mapController: _mapController,
                   layers: [
@@ -159,7 +162,7 @@ class RunningTracker extends HookWidget {
                     ),
                     MarkerLayerOptions(markers: [
                       Marker(
-                        point: LatLng(23.8103, 90.4125),
+                        point: tracker.state.currentLocation,
                         builder: (context) => Container(
                           child: Icon(
                             Icons.album_outlined,
