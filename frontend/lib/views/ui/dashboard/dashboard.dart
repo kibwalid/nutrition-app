@@ -20,7 +20,7 @@ class Dashboard extends HookWidget {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      height: size.height * .45,
+                      height: size.height * 1,
                       decoration: BoxDecoration(
                         color: Color(0xFFF5CEB8),
                       ),

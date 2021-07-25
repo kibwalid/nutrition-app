@@ -92,6 +92,8 @@ class SideDrawer extends HookWidget {
                         leading: Icon(Icons.exit_to_app),
                         onTap: () {
                           authInfo.state = null;
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false);
                         }),
                   ],
                 ),
