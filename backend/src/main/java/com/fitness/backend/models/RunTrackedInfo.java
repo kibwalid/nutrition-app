@@ -16,7 +16,7 @@ public class RunTrackedInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int userID;
-    private String date;
+    private String date;    
     private String calorieBurned;
     private double distanceTraveled;
     @ElementCollection

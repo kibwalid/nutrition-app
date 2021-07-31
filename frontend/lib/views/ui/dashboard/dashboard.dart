@@ -73,7 +73,10 @@ class Dashboard extends HookWidget {
                                   DashboardCard(
                                     title: "Water Intake",
                                     imgSrc: "assets/icons/water.png",
-                                    press: () {},
+                                    press: () {
+                                      Navigator.pushNamed(
+                                          context, "/water/intake");
+                                    },
                                   ),
                                   DashboardCard(
                                     title: () {

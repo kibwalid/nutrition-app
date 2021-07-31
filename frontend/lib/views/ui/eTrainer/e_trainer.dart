@@ -7,7 +7,7 @@ class ETrainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Background(
-      header: "",
+      header: "eTrainer",
       leading: BackButton(
         color: Colors.black,
       ),
@@ -70,7 +70,10 @@ class ETrainer extends StatelessWidget {
                       children: <Widget>[
                         SeassionCard(
                           sessionName: "Squats",
-                          press: () {},
+                          press: () {
+                            Navigator.pushNamed(context, "/single/exercise",
+                                arguments: "squats");
+                          },
                         ),
                         SeassionCard(
                           sessionName: "Push-ups",
@@ -155,7 +158,7 @@ class ETrainer extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 100,
+                      height: size.height * 0.02,
                     )
                   ],
                 ),
