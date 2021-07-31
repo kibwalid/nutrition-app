@@ -53,6 +53,8 @@ final trackerStreamProvider = StreamProvider<int>((ref) {
                       trackerState.state.routeList.last,
                       trackerState.state
                           .routeList[trackerState.state.routeList.length - 2]);
+          trackerState.state.calorieBurned =
+              (trackerState.state.distanceTraveled / 1000) * 60 * 1.036;
         } else {
           trackerState.state.distanceTraveled = 0;
         }

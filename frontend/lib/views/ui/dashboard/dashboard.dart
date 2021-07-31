@@ -66,11 +66,13 @@ class Dashboard extends HookWidget {
                                   DashboardCard(
                                     title: "eTrainer",
                                     imgSrc: "assets/icons/coach.png",
-                                    press: () {},
+                                    press: () {
+                                      Navigator.pushNamed(context, "/etrainer");
+                                    },
                                   ),
                                   DashboardCard(
-                                    title: "Meditation Assistance",
-                                    imgSrc: "assets/icons/meditation.png",
+                                    title: "Water Intake",
+                                    imgSrc: "assets/icons/water.png",
                                     press: () {},
                                   ),
                                   DashboardCard(

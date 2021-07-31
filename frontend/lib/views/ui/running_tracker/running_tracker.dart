@@ -12,10 +12,14 @@ import 'package:intl/intl.dart';
 
 class RunningTracker extends HookWidget {
   MapController _mapController = MapController();
+  List<LatLng> test = [];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final tracker = useProvider(trackerStateProvider);
+    final trackerStream = useProvider(trackerStreamProvider);
+    final runAction = useProvider(actionStateProvider);
+
     return Background(
       leading: BackButton(
         color: Colors.black,
@@ -93,7 +97,7 @@ class RunningTracker extends HookWidget {
                               style: TextStyle(fontSize: 16.0),
                             ),
                             Text(
-                              "80",
+                              "${(tracker.state.distanceTraveled / 1000).toStringAsFixed(2)}",
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
@@ -123,7 +127,7 @@ class RunningTracker extends HookWidget {
                               style: TextStyle(fontSize: 16.0),
                             ),
                             Text(
-                              "950",
+                              "${tracker.state.calorieBurned.toStringAsFixed(2)}",
                               style: TextStyle(fontSize: 20),
                             ),
                             Text(
@@ -176,7 +180,7 @@ class RunningTracker extends HookWidget {
                         Polyline(
                             points: [],
                             strokeWidth: 3.0,
-                            color: Colors.yellowAccent,
+                            color: Colors.black,
                             isDotted: true)
                       ],
                     )
@@ -195,8 +199,8 @@ class RunningTracker extends HookWidget {
                 child: IconButton(
                     icon: Icon(Icons.location_searching),
                     onPressed: () {
-                      _mapController.onReady.then((value) =>
-                          _mapController.move(LatLng(23.8103, 90.4125), 18));
+                      _mapController.onReady.then((value) => _mapController
+                          .move(tracker.state.currentLocation, 18));
                     })),
           ),
           Positioned(
@@ -212,7 +216,7 @@ class RunningTracker extends HookWidget {
                     icon: Icon(Icons.zoom_out),
                     onPressed: () {
                       _mapController.onReady.then((value) =>
-                          _mapController.move(LatLng(23.8103, 90.4125),
+                          _mapController.move(tracker.state.currentLocation,
                               _mapController.zoom - 1));
                     })),
           ),
@@ -229,7 +233,7 @@ class RunningTracker extends HookWidget {
                     icon: Icon(Icons.zoom_in),
                     onPressed: () {
                       _mapController.onReady.then((value) =>
-                          _mapController.move(LatLng(23.8103, 90.4125),
+                          _mapController.move(tracker.state.currentLocation,
                               _mapController.zoom + 1));
                     })),
           ),
@@ -250,14 +254,18 @@ class RunningTracker extends HookWidget {
                     height: size.height * 0.05,
                   ),
                   Center(
-                    child: Text(
-                      LocationServices().secToHourAndMin(0),
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 45.0,
-                          color: Colors.black),
-                    ),
-                  ),
+                      child: trackerStream.when(
+                          data: (data) {
+                            return Text(
+                              LocationServices().secToHourAndMin(data),
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 45.0,
+                                  color: Colors.black),
+                            );
+                          },
+                          loading: () => CircularProgressIndicator(),
+                          error: (e, s) => Text("Error: " + e.toString()))),
                   Icon(
                     Icons.horizontal_rule_outlined,
                     size: size.width * 0.07,
@@ -266,14 +274,30 @@ class RunningTracker extends HookWidget {
                     children: [
                       Expanded(
                         child: RoundedButton(
-                          press: () {},
-                          text: "Start",
+                          press: () {
+                            runAction.state = !runAction.state;
+                          },
+                          text: () {
+                            if (runAction.state) {
+                              return "Pause";
+                            } else {
+                              return "Start";
+                            }
+                          }(),
                           color: Colors.blueAccent,
                         ),
                       ),
                       Expanded(
                         child: RoundedButton(
-                          press: () {},
+                          press: () {
+                            runAction.state = false;
+                            tracker.state.calorieBurned = 0;
+                            tracker.state.counter = 0;
+                            tracker.state.distanceTraveled = 0;
+                            tracker.state.routeList = [];
+                            LocationServices().stopGettingLocationData();
+                            Navigator.pop(context);
+                          },
                           text: "End",
                           color: Colors.redAccent,
                         ),

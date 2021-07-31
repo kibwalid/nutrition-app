@@ -16,6 +16,7 @@ class LoginScreen extends HookWidget {
   Widget build(BuildContext context) {
     final authInfo = context.read(authInfoProvider);
     final tracker = context.read(trackerStateProvider);
+    final location = context.read(locationStateNotifier);
     UserLogin userLogin = UserLogin();
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
@@ -85,6 +86,7 @@ class LoginScreen extends HookWidget {
                         var data = await UserServices().login(userLogin);
                         authInfo.state = data;
                         tracker.state.currentLocation = data.loggedLocation;
+                        location.getCurrentLocation();
                         if (authInfo.state != null && data != null) {
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);

@@ -20,6 +20,7 @@ class RegisterScreen extends HookWidget {
     Size size = MediaQuery.of(context).size;
     final authInfo = context.read(authInfoProvider);
     final tracker = context.read(trackerStateProvider);
+    final location = context.read(locationStateNotifier);
     return BackgroundUnlogged(
         headerText: "Register",
         leading: BackButton(
@@ -135,6 +136,7 @@ class RegisterScreen extends HookWidget {
                         var data = await UserServices().register(userInfo);
                         authInfo.state = data;
                         tracker.state.currentLocation = data.loggedLocation;
+                        location.getCurrentLocation();
                         if (authInfo.state != null && data != null) {
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
