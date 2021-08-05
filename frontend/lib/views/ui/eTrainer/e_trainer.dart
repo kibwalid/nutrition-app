@@ -1,3 +1,4 @@
+import 'package:fitness/views/ui/eTrainer/single_training.dart';
 import 'package:fitness/views/ui/eTrainer/utils/session_card.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:flutter/material.dart';
@@ -71,21 +72,41 @@ class ETrainer extends StatelessWidget {
                         SeassionCard(
                           sessionName: "Squats",
                           press: () {
-                            Navigator.pushNamed(context, "/single/exercise",
-                                arguments: "squats");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingleTraining(
+                                        header: "Squats",
+                                        videoAsset: "assets/videos/yoga2.mp4",
+                                      )),
+                            );
                           },
                         ),
                         SeassionCard(
-                          sessionName: "Push-ups",
-                          press: () {},
-                        ),
-                        SeassionCard(
-                          sessionName: "Planks",
-                          press: () {},
+                          sessionName: "Back Stretch",
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingleTraining(
+                                        header: "Back Stretch",
+                                        videoAsset: "assets/videos/yoga.mp4",
+                                      )),
+                            );
+                          },
                         ),
                         SeassionCard(
                           sessionName: "Burpees",
-                          press: () {},
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingleTraining(
+                                        header: "Burpees",
+                                        videoAsset: "assets/videos/burpees.mp4",
+                                      )),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -118,6 +139,11 @@ class ETrainer extends StatelessWidget {
                         ),
                         SeassionCard(
                           sessionName: "Brench Press",
+                          locked: true,
+                          press: () {},
+                        ),
+                        SeassionCard(
+                          sessionName: "Push-ups",
                           locked: true,
                           press: () {},
                         ),
