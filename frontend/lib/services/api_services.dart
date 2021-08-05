@@ -40,6 +40,23 @@ class Api {
     }
   }
 
+  Future<dynamic> getAll(String apiUri, String token) async {
+    final response = await http
+        .get(Uri.parse(apiUri), headers: {'Authorization': 'Bearer $token'});
+
+    if (response.statusCode == 200) {
+      if (response.body.isNotEmpty) {
+        return jsonDecode(response.body);
+      } else {
+        return {'message': 'No data from response string, see http.get'};
+      }
+    } else {
+      Map info = jsonDecode(response.body);
+      print(info);
+      return info;
+    }
+  }
+
   Future<dynamic> getFromCN(String query) async {
     String responseString = "";
     final response = await http.get(

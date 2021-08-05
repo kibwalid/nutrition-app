@@ -21,5 +21,5 @@ public class RunTrackedInfo {
     private double distanceTraveled;
     @ElementCollection
     private List<String> locationCords;
-
+    private String dietId;
 }

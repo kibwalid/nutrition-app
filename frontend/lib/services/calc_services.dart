@@ -32,12 +32,28 @@ class CalcServices {
 
   Future<WaterTaken> addWater(WaterTaken waterTaken, AuthInfo authInfo) async {
     waterTaken.userId = int.parse(authInfo.userId);
+    waterTaken.date = DateTime.now().toString();
     waterTaken.waterIntakeId =
         "${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_of_user_${authInfo.userId}";
     Map<String, dynamic> response = await Api().postWithToken(
         "$API_URI/api/intake/add", authInfo.token, waterTaken.toJson());
     if (response["message"] == null) {
       return WaterTaken.fromJson(response);
+    }
+    return null;
+  }
+
+  Future<List<WaterTaken>> getAllWaterIntake(AuthInfo authInfo) async {
+    List<dynamic> response = await Api()
+        .getAll("$API_URI/api/intake/all/${authInfo.userId}", authInfo.token);
+    List<WaterTaken> waterIntakes = [];
+    response.forEach((element) {
+      if (element['amount'] > 0) {
+        waterIntakes.add(WaterTaken.fromJson(element));
+      }
+    });
+    if (waterIntakes.isNotEmpty) {
+      return waterIntakes;
     }
     return null;
   }

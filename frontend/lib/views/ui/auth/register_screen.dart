@@ -1,7 +1,10 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/models/user_info.dart';
+import 'package:fitness/models/water_intake.dart';
+import 'package:fitness/providers/calc_providers.dart';
 import 'package:fitness/providers/running_tracker_providers.dart';
 import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background_unlogged.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
@@ -21,6 +24,7 @@ class RegisterScreen extends HookWidget {
     final authInfo = context.read(authInfoProvider);
     final tracker = context.read(trackerStateProvider);
     final location = context.read(locationStateNotifier);
+    final waterIntake = context.read(waterIntakeState);
     return BackgroundUnlogged(
         headerText: "Register",
         leading: BackButton(
@@ -135,11 +139,25 @@ class RegisterScreen extends HookWidget {
                     onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Row(
+                            children: <Widget>[
+                              CircularProgressIndicator(),
+                              Text("    Logging in...")
+                            ],
+                          ),
+                        ));
                         var data = await UserServices().register(userInfo);
                         authInfo.state = data;
-                        tracker.state.currentLocation = data.loggedLocation;
                         location.getCurrentLocation();
+                        tracker.state.currentLocation = data.loggedLocation;
                         if (authInfo.state != null && data != null) {
+                          List<WaterTaken> waterIntakes = await CalcServices()
+                              .getWaterIntakeOfDay(
+                                  authInfo.state.userId, authInfo.state.token);
+                          waterIntakes.forEach((element) {
+                            waterIntake.state += element.amount;
+                          });
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
                         } else {

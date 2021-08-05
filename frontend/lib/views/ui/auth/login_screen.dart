@@ -94,7 +94,11 @@ class LoginScreen extends HookWidget {
                           List<WaterTaken> waterIntakes = await CalcServices()
                               .getWaterIntakeOfDay(
                                   authInfo.state.userId, authInfo.state.token);
-
+                          List<WaterTaken> waterTaken = await CalcServices()
+                              .getAllWaterIntake(authInfo.state);
+                          waterTaken.forEach((element) {
+                            waterIntake.state += element.amount;
+                          });
                           waterIntakes.forEach((element) {
                             waterIntake.state += element.amount;
                           });

@@ -22,7 +22,7 @@ class WaterIntake extends HookWidget {
   Widget build(BuildContext context) {
     final location = useProvider(locationStateNotifier);
     final authInfo = context.read(authInfoProvider);
-    final waterIntake = useProvider(waterIntakeState);
+    final waterIntake = context.read(waterIntakeState);
     WaterTaken waterTaken = WaterTaken();
     Size size = MediaQuery.of(context).size;
     onload() async {
@@ -76,7 +76,9 @@ class WaterIntake extends HookWidget {
                     ),
                     child: IconButton(
                       icon: Icon(Icons.history),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/water/history");
+                      },
                     ),
                   ),
                 ),
@@ -113,7 +115,7 @@ class WaterIntake extends HookWidget {
                                         height: size.height * 0.1,
                                       ),
                                       Text(
-                                        "${(waterIntake.state / 1000).toStringAsFixed(1)}L",
+                                        "${(waterIntake.state / 1000).toStringAsFixed(2)}L",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 40),

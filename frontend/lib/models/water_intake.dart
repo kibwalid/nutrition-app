@@ -1,13 +1,14 @@
 import 'dart:convert';
 
-WaterTaken waterIntakeFromJson(String str) =>
+WaterTaken waterTakenFromJson(String str) =>
     WaterTaken.fromJson(json.decode(str));
 
-String waterIntakeToJson(WaterTaken data) => json.encode(data.toJson());
+String waterTakenToJson(WaterTaken data) => json.encode(data.toJson());
 
 class WaterTaken {
   WaterTaken({
     this.amount,
+    this.date,
     this.id,
     this.liquidType,
     this.userId,
@@ -15,6 +16,7 @@ class WaterTaken {
   });
 
   double amount;
+  String date;
   int id;
   String liquidType;
   int userId;
@@ -22,6 +24,7 @@ class WaterTaken {
 
   factory WaterTaken.fromJson(Map<String, dynamic> json) => WaterTaken(
         amount: json["amount"],
+        date: json["date"],
         id: json["id"],
         liquidType: json["liquidType"],
         userId: json["userId"],
@@ -30,6 +33,7 @@ class WaterTaken {
 
   Map<String, dynamic> toJson() => {
         "amount": amount,
+        "date": date,
         "id": id,
         "liquidType": liquidType,
         "userId": userId,

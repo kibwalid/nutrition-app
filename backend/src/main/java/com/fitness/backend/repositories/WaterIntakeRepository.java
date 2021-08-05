@@ -10,4 +10,6 @@ public interface WaterIntakeRepository extends JpaRepository<WaterIntake, Intege
 
 
     List<WaterIntake> findAllByWaterIntakeIdAndId(String waterIntakeId, int id);
+
+    List<WaterIntake> findAllByUserId(int userId);
 }

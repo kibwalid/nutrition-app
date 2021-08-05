@@ -1,6 +1,7 @@
 package com.fitness.backend.controller;
 
 import com.fitness.backend.models.ExerciseInfo;
+import com.fitness.backend.models.RunTrackedInfo;
 import com.fitness.backend.services.ExerciseServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,9 @@ public class ExerciseController {
         return new ResponseEntity<>(exerciseServices.deleteExerciseInfo(id), HttpStatus.OK);
     }
 
+    @PostMapping("/running/")
+    public RunTrackedInfo addRunTrackedData(@RequestBody RunTrackedInfo runTrackedInfo){
+        return exerciseServices.addRunningTrackedData(runTrackedInfo);
+    }
 
 }

@@ -25,4 +25,9 @@ public class WaterIntakeController {
     public WaterIntake addWaterIntake(@RequestBody WaterIntake waterIntake){
         return waterIntakeServices.addWaterIntake(waterIntake);
     }
+
+    @GetMapping("/all/{userId}")
+    public List<WaterIntake> getAllWaterIntake(@PathVariable int userId){
+        return waterIntakeServices.getAllWaterIntake(userId);
+    }
 }

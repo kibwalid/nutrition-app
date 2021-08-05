@@ -37,4 +37,12 @@ public class WaterIntakeServices {
             throw new AppException("Server Error: Cannot add water intake", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public List<WaterIntake> getAllWaterIntake(int userId) {
+        try{
+            return waterIntakeRepository.findAllByUserId(userId);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot fetch all water intake of user", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

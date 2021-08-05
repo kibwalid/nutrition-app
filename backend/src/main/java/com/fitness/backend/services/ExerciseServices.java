@@ -2,7 +2,9 @@ package com.fitness.backend.services;
 
 import com.fitness.backend.exceptions.AppException;
 import com.fitness.backend.models.ExerciseInfo;
+import com.fitness.backend.models.RunTrackedInfo;
 import com.fitness.backend.repositories.ExerciseInfoRepository;
+import com.fitness.backend.repositories.RunTrackedDataRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class ExerciseServices {
 
     private final ExerciseInfoRepository exerciseInfoRepository;
+    private final RunTrackedDataRepository runTrackedDataRepository;
 
-    public ExerciseServices(ExerciseInfoRepository exerciseInfoRepository) {
+    public ExerciseServices(ExerciseInfoRepository exerciseInfoRepository, RunTrackedDataRepository runTrackedDataRepository) {
         this.exerciseInfoRepository = exerciseInfoRepository;
+        this.runTrackedDataRepository = runTrackedDataRepository;
     }
 
     public ExerciseInfo addExerciseInfo(ExerciseInfo exerciseInfo){
@@ -61,4 +65,11 @@ public class ExerciseServices {
         }
     }
 
+    public RunTrackedInfo addRunningTrackedData(RunTrackedInfo runTrackedInfo) {
+        try {
+            return runTrackedDataRepository.saveAndFlush(runTrackedInfo);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot add running tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

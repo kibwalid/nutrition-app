@@ -21,4 +21,5 @@ public class WaterIntake {
     private double amount;
     private int userId;
     private String waterIntakeId;
+    private String date;
 }
