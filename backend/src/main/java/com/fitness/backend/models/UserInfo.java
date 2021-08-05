@@ -22,5 +22,7 @@ public class UserInfo {
     private String lastName;
     private String email;
     private String phoneNum;
+    private double userHeight;
+    private double userWeight;
     private String username;
 }

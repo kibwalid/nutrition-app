@@ -9,6 +9,7 @@ class Background extends StatefulWidget {
   final Color headerColor;
   final Color appbarBG;
   final List<Widget> actions;
+  final bool resizeToBottom;
 
   const Background({
     Key key,
@@ -18,6 +19,7 @@ class Background extends StatefulWidget {
     this.appbarBG = Colors.transparent,
     this.headerColor = primaryColor,
     this.actions,
+    this.resizeToBottom = true,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class _BackgroundState extends State<Background> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: widget.resizeToBottom,
       extendBodyBehindAppBar: true,
       appBar: new AppBar(
         leading: widget.leading,

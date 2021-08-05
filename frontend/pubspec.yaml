@@ -35,6 +35,7 @@ dependencies:
   permission_handler:
   background_locator:
   percent_indicator: "^2.1.7+2"
+  weather: ^2.0.1
 
 flutter_native_splash:
   color: "#ba6750"

@@ -178,7 +178,7 @@ class RunningTracker extends HookWidget {
                     PolylineLayerOptions(
                       polylines: [
                         Polyline(
-                            points: [],
+                            points: tracker.state.routeList,
                             strokeWidth: 3.0,
                             color: Colors.black,
                             isDotted: true)

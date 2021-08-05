@@ -8,18 +8,21 @@ class InputTextField extends StatelessWidget {
     this.onSaved,
     this.password = false,
     this.validator,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   final String label;
   final Function onSaved;
   final Function validator;
   final bool password;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: validator,
       onSaved: onSaved,
+      keyboardType: keyboardType,
       obscureText: password,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
