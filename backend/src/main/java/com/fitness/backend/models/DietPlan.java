@@ -22,5 +22,7 @@ public class DietPlan {
     private double weightNow;
     private double weightTarget;
     private double caloriePerDay;
+    private String dietId;
+    private int status; // 1 = active, 0 inactive
     private int userId;
 }

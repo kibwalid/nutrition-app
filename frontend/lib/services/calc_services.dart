@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/auth_info.dart';
+import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/models/food_item.dart';
 import 'package:fitness/models/running_tracker_local.dart';
@@ -147,10 +148,53 @@ class CalcServices {
   }
 
   Future<Exercise> addExercise(Exercise exercise, String token) async {
+    print(exercise.toJson());
     Map<String, dynamic> response = await Api()
         .postWithToken("$API_URI/api/exercise/", token, exercise.toJson());
     if (response['message'] == null) {
       return Exercise.fromJson(response);
+    }
+    return null;
+  }
+
+  Future<List<Exercise>> getAllExercise(AuthInfo authInfo) async {
+    List<dynamic> response = await Api()
+        .getAll("$API_URI/api/exercise/all/${authInfo.userId}", authInfo.token);
+    List<Exercise> exerciseList = [];
+    response.forEach((element) {
+      exerciseList.add(Exercise.fromJson(element));
+    });
+    if (exerciseList.isNotEmpty) {
+      return exerciseList;
+    }
+    return null;
+  }
+
+  Future<bool> checkDietActivity(AuthInfo authInfo) async {
+    String json =
+        await Api().get("$API_URI/api/diet/${authInfo.userId}", authInfo.token);
+    Map<String, dynamic> response = jsonDecode(json);
+    if (response["message"] == null) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<DietPlan> getActiveDietPlan(AuthInfo authInfo) async {
+    String json =
+        await Api().get("$API_URI/api/diet/${authInfo.userId}", authInfo.token);
+    Map<String, dynamic> response = jsonDecode(json);
+    if (response["message"] == null) {
+      return DietPlan.fromJson(response);
+    }
+    return null;
+  }
+
+  Future<DietPlan> addDietPlan(DietPlan dietPlan, AuthInfo authInfo) async {
+    Map<String, dynamic> response = await Api()
+        .postWithToken("$API_URI/", authInfo.token, dietPlan.toJson());
+    if (response["message"] == null) {
+      return DietPlan.fromJson(response);
     }
     return null;
   }

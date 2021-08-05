@@ -103,12 +103,12 @@ class Dashboard extends HookWidget {
                                     },
                                   ),
                                   DashboardCard(
-                                    title: "BMI Calculator",
-                                    imgSrc: "assets/icons/bmi.png",
+                                    title: "Diet Planner",
+                                    imgSrc: "assets/icons/meal_plan.png",
                                     press: () {},
                                   ),
                                   DashboardCard(
-                                    title: "Sleep Tracker",
+                                    title: "Profile",
                                     imgSrc: "assets/icons/sleep_timer.png",
                                     press: () {},
                                   ),

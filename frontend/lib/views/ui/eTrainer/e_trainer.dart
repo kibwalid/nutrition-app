@@ -198,6 +198,25 @@ class ETrainer extends HookWidget {
               ),
             ),
           ),
+          Positioned(
+            top: size.height * 0.13,
+            right: 10,
+            child: Container(
+              alignment: Alignment.center,
+              height: 52,
+              width: 52,
+              decoration: BoxDecoration(
+                color: Color(0xFFF2BEA1),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.history),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/exercise/history");
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
