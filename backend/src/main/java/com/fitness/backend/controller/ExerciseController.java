@@ -51,4 +51,9 @@ public class ExerciseController {
         return exerciseServices.addRunningTrackedData(runTrackedInfo);
     }
 
+    @GetMapping("/running/all/{userID}")
+    public List<RunTrackedInfo> getAllRunTrackedData(@PathVariable int userID){
+        return exerciseServices.getAllRunTrackedData(userID);
+    }
+
 }

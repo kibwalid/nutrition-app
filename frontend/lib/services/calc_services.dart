@@ -1,6 +1,8 @@
 import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/auth_info.dart';
 import 'package:fitness/models/food_item.dart';
+import 'package:fitness/models/running_tracker_local.dart';
+import 'package:fitness/models/running_tracker_remote.dart';
 import 'package:fitness/models/water_intake.dart';
 import 'package:fitness/services/api_services.dart';
 
@@ -54,6 +56,34 @@ class CalcServices {
     });
     if (waterIntakes.isNotEmpty) {
       return waterIntakes;
+    }
+    return null;
+  }
+
+  Future<RunningTrackerRemote> addRunningData(
+      AuthInfo authInfo, Tracker tracker) async {
+    List<String> routeListForDB = [];
+    tracker.routeList.forEach((element) {
+      String cords = element.toString().replaceAll("LatLng(latitude:", "");
+      cords = cords.replaceAll("longitude:", "");
+      cords = cords.replaceAll(")", "");
+      cords = cords.replaceAll(",", "+");
+      routeListForDB.add("($cords)");
+    });
+    Map<String, dynamic> jsonData = {
+      "calorieBurned": tracker.calorieBurned.toString(),
+      "counter": tracker.counter,
+      "date": DateTime.now().toString(),
+      "dietId": "",
+      "distanceTraveled": tracker.distanceTraveled,
+      "locationCords": routeListForDB,
+      "userID": int.parse(authInfo.userId)
+    };
+
+    Map<String, dynamic> response = await Api().postWithToken(
+        "$API_URI/api/exercise/running/", authInfo.token, jsonData);
+    if (response['message'] != null) {
+      return RunningTrackerRemote.fromJson(response);
     }
     return null;
   }

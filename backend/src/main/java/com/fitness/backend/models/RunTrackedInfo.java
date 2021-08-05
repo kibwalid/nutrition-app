@@ -22,4 +22,5 @@ public class RunTrackedInfo {
     @ElementCollection
     private List<String> locationCords;
     private String dietId;
+    private int counter;
 }

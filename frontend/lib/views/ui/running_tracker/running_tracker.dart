@@ -1,5 +1,7 @@
 import 'package:fitness/config/theme.dart';
 import 'package:fitness/providers/running_tracker_providers.dart';
+import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/services/location_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -19,8 +21,45 @@ class RunningTracker extends HookWidget {
     final tracker = useProvider(trackerStateProvider);
     final trackerStream = useProvider(trackerStreamProvider);
     final runAction = useProvider(actionStateProvider);
+    final authInfo = context.read(authInfoProvider);
 
     return Background(
+      actions: [
+        GestureDetector(
+          onTap: () async {
+            runAction.state = false;
+            tracker.state.calorieBurned = 0;
+            tracker.state.counter = 0;
+            tracker.state.distanceTraveled = 0;
+            tracker.state.routeList = [];
+
+            LocationServices().stopGettingLocationData();
+            Navigator.pop(context);
+          },
+          child: Container(
+            width: size.width * .4,
+            height: size.height * .00,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(17.0),
+                color: Colors.transparent),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Icon(
+                  Icons.clear_sharp,
+                  color: Colors.white,
+                ),
+                Text('Cancel Tracking',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontSize: 15.0)),
+                SizedBox(width: size.width * 0.02),
+              ],
+            ),
+          ),
+        ),
+      ],
       leading: BackButton(
         color: Colors.black,
       ),
@@ -31,7 +70,7 @@ class RunningTracker extends HookWidget {
           Container(
             height: size.height * .45,
             decoration: BoxDecoration(
-              color: Color(0xFFA09C98),
+              color: Color(0xFFA98D7F),
             ),
           ),
           Positioned(
@@ -290,11 +329,22 @@ class RunningTracker extends HookWidget {
                       Expanded(
                         child: RoundedButton(
                           press: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Row(
+                                children: <Widget>[
+                                  CircularProgressIndicator(),
+                                  Text("    Saving data, Please wait...")
+                                ],
+                              ),
+                            ));
+                            CalcServices()
+                                .addRunningData(authInfo.state, tracker.state);
                             runAction.state = false;
                             tracker.state.calorieBurned = 0;
                             tracker.state.counter = 0;
                             tracker.state.distanceTraveled = 0;
                             tracker.state.routeList = [];
+
                             LocationServices().stopGettingLocationData();
                             Navigator.pop(context);
                           },

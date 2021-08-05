@@ -72,4 +72,12 @@ public class ExerciseServices {
             throw new AppException("Server Error: Cannot add running tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public List<RunTrackedInfo> getAllRunTrackedData(int userID) {
+        try {
+            return runTrackedDataRepository.findAllByUserID(userID);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot get tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
