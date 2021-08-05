@@ -19,5 +19,6 @@ public class ExerciseInfo {
     private String exerciseName;
     private double caloriesBurned;
     private int counter;
+    private int timesDone;
     private String date;
 }

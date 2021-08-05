@@ -1,3 +1,6 @@
+import 'package:fitness/models/auth_info.dart';
+import 'package:fitness/models/exercise.dart';
+import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:fitness/views/utils/input_text_field.dart';
 import 'package:fitness/views/utils/rounded_button.dart';
@@ -7,8 +10,9 @@ import 'package:video_player/video_player.dart';
 class SingleTraining extends StatefulWidget {
   final String videoAsset;
   final String header;
+  final AuthInfo authInfo;
 
-  const SingleTraining({Key key, this.videoAsset, this.header})
+  const SingleTraining({Key key, this.videoAsset, this.header, this.authInfo})
       : super(key: key);
   @override
   _SingleTrainingState createState() => _SingleTrainingState();
@@ -34,6 +38,7 @@ class _SingleTrainingState extends State<SingleTraining> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Exercise exercise = Exercise();
     return Background(
       headerColor: Colors.black,
       header: widget.header,
@@ -88,8 +93,11 @@ class _SingleTrainingState extends State<SingleTraining> {
                                     child: Column(
                                       children: <Widget>[
                                         InputTextField(
-                                          label: 'Time Spent (In sec)',
-                                          onSaved: (value) {},
+                                          label: 'Time Spent (In min)',
+                                          onSaved: (value) {
+                                            exercise.counter =
+                                                int.parse(value) * 60;
+                                          },
                                           keyboardType: TextInputType.number,
                                           validator: (value) {
                                             if (value.length == 0)
@@ -106,7 +114,10 @@ class _SingleTrainingState extends State<SingleTraining> {
                                             if (value.length == 0)
                                               return ("Times is required");
                                           },
-                                          onSaved: (value) {},
+                                          onSaved: (value) {
+                                            exercise.timesDone =
+                                                int.parse(value);
+                                          },
                                         ),
                                         SizedBox(
                                           height: size.height * 0.02,
@@ -118,6 +129,19 @@ class _SingleTrainingState extends State<SingleTraining> {
                                             if (formKey.currentState
                                                 .validate()) {
                                               formKey.currentState.save();
+                                              exercise.date =
+                                                  DateTime.now().toString();
+                                              exercise.exerciseName =
+                                                  widget.header;
+                                              exercise.caloriesBurned =
+                                                  7.6 * (exercise.counter / 47);
+                                              exercise.userId = int.parse(
+                                                  widget.authInfo.userId);
+                                              CalcServices().addExercise(
+                                                  exercise,
+                                                  widget.authInfo.token);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
                                             }
                                           },
                                         )

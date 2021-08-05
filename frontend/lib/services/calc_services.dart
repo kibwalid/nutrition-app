@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/auth_info.dart';
+import 'package:fitness/models/exercise.dart';
 import 'package:fitness/models/food_item.dart';
 import 'package:fitness/models/running_tracker_local.dart';
 import 'package:fitness/models/running_tracker_remote.dart';
@@ -143,5 +144,14 @@ class CalcServices {
       trackerList.add(tracker);
     });
     return trackerList;
+  }
+
+  Future<Exercise> addExercise(Exercise exercise, String token) async {
+    Map<String, dynamic> response = await Api()
+        .postWithToken("$API_URI/api/exercise/", token, exercise.toJson());
+    if (response['message'] == null) {
+      return Exercise.fromJson(response);
+    }
+    return null;
   }
 }

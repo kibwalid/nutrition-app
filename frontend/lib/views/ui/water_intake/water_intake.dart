@@ -54,6 +54,8 @@ class WaterIntake extends HookWidget {
               double waterPercent = 0;
               if (waterIntake.state != 0) {
                 waterPercent = waterNeeded / waterIntake.state;
+                waterPercent = 1 - waterPercent;
+                print(waterPercent);
               }
 
               return Stack(children: <Widget>[
