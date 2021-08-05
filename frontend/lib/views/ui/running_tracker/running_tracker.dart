@@ -86,7 +86,9 @@ class RunningTracker extends HookWidget {
               ),
               child: IconButton(
                 icon: Icon(Icons.history),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, "/track/history");
+                },
               ),
             ),
           ),

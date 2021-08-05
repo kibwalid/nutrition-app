@@ -7,6 +7,8 @@ class Tracker {
   double distanceTraveled;
   List<LatLng> routeList;
   LatLng currentLocation;
+  int remoteId;
+  String dietId;
 
   Tracker(
       {this.counter,
@@ -14,5 +16,7 @@ class Tracker {
       this.date,
       this.currentLocation,
       this.calorieBurned,
-      this.distanceTraveled});
+      this.distanceTraveled,
+      this.dietId,
+      this.remoteId});
 }

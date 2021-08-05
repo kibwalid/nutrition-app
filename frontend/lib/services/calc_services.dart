@@ -5,6 +5,7 @@ import 'package:fitness/models/running_tracker_local.dart';
 import 'package:fitness/models/running_tracker_remote.dart';
 import 'package:fitness/models/water_intake.dart';
 import 'package:fitness/services/api_services.dart';
+import 'package:latlong/latlong.dart';
 
 class CalcServices {
   Future<FoodItem> getMealInfo(String query) async {
@@ -86,5 +87,32 @@ class CalcServices {
       return RunningTrackerRemote.fromJson(response);
     }
     return null;
+  }
+
+  Future<List<Tracker>> getAllTrackedRun(AuthInfo authInfo) async {
+    List<dynamic> response = await Api().getAll(
+        "$API_URI/api/exercise/running/all/${authInfo.userId}", authInfo.token);
+    print(response);
+    List<Tracker> trackerList = [];
+    response.forEach((element) {
+      Tracker tracker = Tracker();
+      tracker.calorieBurned = double.parse(element['calorieBurned']);
+      tracker.counter = element['counter'];
+      tracker.date = DateTime.parse(element['date']);
+      tracker.distanceTraveled = element['distanceTraveled'];
+      List<LatLng> routeList = [];
+      element['locationCords'].forEach((element) {
+        element = element.replaceAll("(", "");
+        element = element.replaceAll(")", "");
+        List<String> data = element.split("+");
+        double lat = double.parse(data[0]);
+        double long = double.parse(data[1]);
+        LatLng pointCords = LatLng(lat, long);
+        routeList.add(pointCords);
+      });
+      tracker.routeList = routeList;
+      trackerList.add(tracker);
+    });
+    return trackerList;
   }
 }

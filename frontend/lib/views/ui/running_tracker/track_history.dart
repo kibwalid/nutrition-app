@@ -1,11 +1,21 @@
+import 'package:fitness/models/running_tracker_local.dart';
+import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class TrackHistory extends StatelessWidget {
+class TrackHistory extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    onload() async {}
+    final authInfo = context.read(authInfoProvider);
+    onload() async {
+      List<Tracker> trackerList =
+          await CalcServices().getAllTrackedRun(authInfo.state);
+      return trackerList;
+    }
 
     Size size = MediaQuery.of(context).size;
     return Background(
@@ -62,8 +72,11 @@ class TrackHistory extends StatelessWidget {
                               return ListView.builder(
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (context, index) {
+                                    Tracker tracker = snapshot.data[index];
                                     return GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        print("object");
+                                      },
                                       child: Container(
                                         margin:
                                             EdgeInsets.symmetric(vertical: 10),
@@ -85,7 +98,7 @@ class TrackHistory extends StatelessWidget {
                                         child: Row(
                                           children: <Widget>[
                                             Image.network(
-                                              "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png",
+                                              "https://png.pngtree.com/png-vector/20190409/ourlarge/pngtree-map-icon-vector-illustration-in-line-style-for-any-purpose-png-image_924190.jpg",
                                               scale: size.aspectRatio * 20,
                                             ),
                                             SizedBox(width: 20),
@@ -94,14 +107,10 @@ class TrackHistory extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  SizedBox(
-                                                    height: size.height * 0.01,
-                                                  ),
                                                   Text(
-                                                    snapshot
-                                                        .data[index].liquidType,
+                                                    "Tracked Record: ${index + 1}",
                                                     style: TextStyle(
-                                                        fontSize: 20,
+                                                        fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
@@ -109,19 +118,21 @@ class TrackHistory extends StatelessWidget {
                                                     height:
                                                         size.height * 0.0012,
                                                   ),
-                                                  Text(snapshot
-                                                          .data[index].amount
-                                                          .toString() +
-                                                      " mL")
+                                                  Text(
+                                                      "Distance: ${tracker.distanceTraveled.toStringAsFixed(2)} Meters"),
+                                                  SizedBox(
+                                                    height:
+                                                        size.height * 0.0012,
+                                                  ),
+                                                  Text(
+                                                      "Calorie Burned: ${tracker.calorieBurned.toStringAsFixed(2)} Kcal")
                                                 ],
                                               ),
                                             ),
                                             Column(
                                               children: [
                                                 Text(DateFormat.yMMMMd('en_US')
-                                                    .format(DateTime.parse(
-                                                        snapshot.data[index]
-                                                            .date))),
+                                                    .format(tracker.date)),
                                               ],
                                             )
                                           ],
