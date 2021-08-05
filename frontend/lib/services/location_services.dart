@@ -32,6 +32,23 @@ class LocationServices {
     }
   }
 
+  String secToWord(int sec) {
+    int hour = sec ~/ 3600;
+    sec %= 3600;
+    int minutes = sec ~/ 60;
+    sec %= 60;
+
+    if (minutes < 10 && hour < 10) {
+      return "$sec Seconds";
+    } else if (minutes < 10) {
+      return "$minutes Minutes $sec Seconds";
+    } else if (hour < 10) {
+      return "$hour Hour $minutes Minutes $sec Seconds";
+    } else {
+      return "$hour Hour $minutes Minutes $sec Seconds";
+    }
+  }
+
   Future<LatLng> requestPerms() async {
     Map<Permission, PermissionStatus> statuses =
         await [Permission.locationAlways].request();

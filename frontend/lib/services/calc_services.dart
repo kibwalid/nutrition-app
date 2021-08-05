@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/auth_info.dart';
 import 'package:fitness/models/food_item.dart';
@@ -89,13 +91,40 @@ class CalcServices {
     return null;
   }
 
+  Future<Tracker> getRunningTrackedData(String id, AuthInfo authInfo) async {
+    String json =
+        await Api().get("$API_URI/api/exercise/running/$id", authInfo.token);
+    Map<String, dynamic> response = jsonDecode(json);
+    if (response['message'] == null) {
+      Tracker tracker = Tracker();
+      tracker.remoteId = response['id'];
+      tracker.calorieBurned = double.parse(response['calorieBurned']);
+      tracker.counter = response['counter'];
+      tracker.date = DateTime.parse(response['date']);
+      tracker.distanceTraveled = response['distanceTraveled'];
+      List<LatLng> routeList = [];
+      response['locationCords'].forEach((element) {
+        element = element.replaceAll("(", "");
+        element = element.replaceAll(")", "");
+        List<String> data = element.split("+");
+        double lat = double.parse(data[0]);
+        double long = double.parse(data[1]);
+        LatLng pointCords = LatLng(lat, long);
+        routeList.add(pointCords);
+      });
+      tracker.routeList = routeList;
+      return tracker;
+    }
+    return null;
+  }
+
   Future<List<Tracker>> getAllTrackedRun(AuthInfo authInfo) async {
     List<dynamic> response = await Api().getAll(
         "$API_URI/api/exercise/running/all/${authInfo.userId}", authInfo.token);
-    print(response);
     List<Tracker> trackerList = [];
     response.forEach((element) {
       Tracker tracker = Tracker();
+      tracker.remoteId = element['id'];
       tracker.calorieBurned = double.parse(element['calorieBurned']);
       tracker.counter = element['counter'];
       tracker.date = DateTime.parse(element['date']);

@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface WaterIntakeRepository extends JpaRepository<WaterIntake, Integer> {
 
-
     List<WaterIntake> findAllByWaterIntakeIdAndId(String waterIntakeId, int id);
 
     List<WaterIntake> findAllByUserId(int userId);

@@ -80,4 +80,16 @@ public class ExerciseServices {
             throw new AppException("Server Error: Cannot get tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public RunTrackedInfo getSingleTrackedRun(int id) {
+        try{
+            Optional<RunTrackedInfo> runTrackedInfo = runTrackedDataRepository.findById(id);
+            if(runTrackedInfo.isEmpty()){
+                throw new AppException("Tracked Record with this id does not exist", HttpStatus.NOT_FOUND);
+            }
+            return runTrackedInfo.get();
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot get tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -75,7 +75,12 @@ class TrackHistory extends HookWidget {
                                     Tracker tracker = snapshot.data[index];
                                     return GestureDetector(
                                       onTap: () {
-                                        print("object");
+                                        Navigator.pushNamed(
+                                            context, "/track/single",
+                                            arguments: {
+                                              "trackerId":
+                                                  tracker.remoteId.toString()
+                                            });
                                       },
                                       child: Container(
                                         margin:

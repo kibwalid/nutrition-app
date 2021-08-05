@@ -6,6 +6,7 @@ import 'package:fitness/views/ui/eTrainer/e_trainer.dart';
 import 'package:fitness/views/ui/eTrainer/single_training.dart';
 import 'package:fitness/views/ui/exercise/add_exercise_data.dart';
 import 'package:fitness/views/ui/running_tracker/running_tracker.dart';
+import 'package:fitness/views/ui/running_tracker/single_tracking.dart';
 import 'package:fitness/views/ui/running_tracker/track_history.dart';
 import 'package:fitness/views/ui/water_intake/intake_history.dart';
 import 'package:fitness/views/ui/water_intake/water_intake.dart';
@@ -19,6 +20,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/exercise/add": (BuildContext context) => AddExercise(),
   "/track/running": (BuildContext context) => RunningTracker(),
   "/track/history": (BuildContext context) => TrackHistory(),
+  "/track/single": (BuildContext context) => SingleTracking(),
   "/etrainer": (BuildContext context) => ETrainer(),
   "/etrainer/single": (BuildContext context) => SingleTraining(),
   "/water/intake": (BuildContext context) => WaterIntake(),

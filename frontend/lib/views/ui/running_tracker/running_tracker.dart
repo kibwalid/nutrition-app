@@ -257,8 +257,8 @@ class RunningTracker extends HookWidget {
                     icon: Icon(Icons.zoom_out),
                     onPressed: () {
                       _mapController.onReady.then((value) =>
-                          _mapController.move(tracker.state.currentLocation,
-                              _mapController.zoom - 1));
+                          _mapController.move(
+                              _mapController.center, _mapController.zoom - 1));
                     })),
           ),
           Positioned(
@@ -274,8 +274,8 @@ class RunningTracker extends HookWidget {
                     icon: Icon(Icons.zoom_in),
                     onPressed: () {
                       _mapController.onReady.then((value) =>
-                          _mapController.move(tracker.state.currentLocation,
-                              _mapController.zoom + 1));
+                          _mapController.move(
+                              _mapController.center, _mapController.zoom + 1));
                     })),
           ),
           Positioned(
