@@ -55,4 +55,43 @@ class Api {
       return info;
     }
   }
+
+  Future<dynamic> getFromWeather(String query) async {
+    String responseString = "";
+    String apiKey = "301bdd5089fb4b0ab5d91616210508";
+    final response = await http.get(Uri.parse(
+        "http://api.weatherapi.com/v1/current.json?key=$apiKey&q=$query"));
+    if (response.statusCode == 200) {
+      responseString = response.body;
+      Map info = jsonDecode(responseString);
+      return info;
+    } else {
+      responseString = response.body;
+      Map info = jsonDecode(responseString);
+      return info;
+    }
+  }
+
+  Future<dynamic> postWithToken(
+      String apiUri, String token, Map<String, dynamic> jsonData) async {
+    String responseString = "";
+    final response = await http.post(
+      Uri.parse(apiUri),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token'
+      },
+      body: json.encode(jsonData),
+    );
+
+    if (response.statusCode == 200) {
+      responseString = response.body;
+      dynamic info = jsonDecode(responseString);
+      return info;
+    } else {
+      responseString = response.body;
+      Map info = jsonDecode(responseString);
+      return info;
+    }
+  }
 }

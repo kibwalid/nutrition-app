@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/diet")
+@RequestMapping("api/diet")
 public class DietPlanController {
 
     private final DietPlanServices dietPlanServices;

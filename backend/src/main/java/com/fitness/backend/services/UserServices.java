@@ -36,8 +36,7 @@ public class UserServices {
     }
 
     public Map<String, String> registerUser(UserInfo userInfo) {
-        if(!(userLoginRepository.existsByUsername(userInfo.getUserLogin().getUsername()) ||
-                userInfoRepository.existsByEmail(userInfo.getEmail()))){
+        if(!(userLoginRepository.existsByUsername(userInfo.getUserLogin().getUsername()))){
             String hashedPassword = BCrypt.hashpw(userInfo.getUserLogin().getPassword(), BCrypt.gensalt(10));
             userInfo.getUserLogin().setPassword(hashedPassword);
             UserInfo user = userInfoRepository.saveAndFlush(userInfo);
@@ -73,9 +72,6 @@ public class UserServices {
         if(updateUserInfo.isPresent()){
             updateUserInfo.get().setFirstName(userInfo.getFirstName());
             updateUserInfo.get().setLastName(userInfo.getLastName());
-            updateUserInfo.get().setPhoneNum(userInfo.getPhoneNum());
-            updateUserInfo.get().setEmail(userInfo.getEmail());
-
             try {
                 return userInfoRepository.saveAndFlush(updateUserInfo.get());
             }catch (Exception e){

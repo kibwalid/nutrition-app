@@ -37,7 +37,6 @@ class UserServices {
   }
 
   Future<UserInfo> getCurrentUserInfo(AuthInfo authInfo) async {
-    print(authInfo.token);
     String response =
         await Api().get("$API_URI/api/user/${authInfo.userId}", authInfo.token);
     return userInfoFromJson(response);

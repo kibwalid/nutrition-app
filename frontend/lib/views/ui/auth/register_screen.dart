@@ -46,7 +46,7 @@ class RegisterScreen extends HookWidget {
                           },
                           validator: (value) {
                             if (value.length == 0)
-                              return ("Username is required");
+                              return ("First Name is required");
                           },
                         ),
                         SizedBox(
@@ -59,33 +59,35 @@ class RegisterScreen extends HookWidget {
                           },
                           validator: (value) {
                             if (value.length == 0)
-                              return ("Username is required");
+                              return ("Last Name is required");
                           },
                         ),
                         SizedBox(
                           height: 16,
                         ),
                         InputTextField(
-                          label: 'Email',
+                          label: 'Height (In Ft.)',
+                          keyboardType: TextInputType.number,
                           onSaved: (value) {
-                            userInfo.email = value;
+                            userInfo.userHeight = double.parse(value);
                           },
                           validator: (value) {
                             if (value.length == 0)
-                              return ("Username is required");
+                              return ("Height is required");
                           },
                         ),
                         SizedBox(
                           height: 16,
                         ),
                         InputTextField(
-                          label: 'Phone Number',
+                          label: 'Weight (In Kg)',
+                          keyboardType: TextInputType.number,
                           onSaved: (value) {
-                            userInfo.phoneNum = value;
+                            userInfo.userWeight = double.parse(value);
                           },
                           validator: (value) {
                             if (value.length == 0)
-                              return ("Username is required");
+                              return ("Weight is required");
                           },
                         ),
                         SizedBox(

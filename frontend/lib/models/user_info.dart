@@ -6,40 +6,44 @@ String userInfoToJson(UserInfo data) => json.encode(data.toJson());
 
 class UserInfo {
   UserInfo({
-    this.email,
     this.firstName,
     this.id,
     this.lastName,
-    this.phoneNum,
+    this.sex,
+    this.userHeight,
     this.userLogin,
+    this.userWeight,
     this.username,
   });
 
-  String email;
   String firstName;
   int id;
   String lastName;
-  String phoneNum;
+  String sex;
+  double userHeight;
   UserLogin userLogin;
+  double userWeight;
   String username;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
-        email: json["email"],
         firstName: json["firstName"],
         id: json["id"],
         lastName: json["lastName"],
-        phoneNum: json["phoneNum"],
+        sex: json["sex"],
+        userHeight: json["userHeight"],
         userLogin: UserLogin.fromJson(json["userLogin"]),
+        userWeight: json["userWeight"],
         username: json["username"],
       );
 
   Map<String, dynamic> toJson() => {
-        "email": email,
         "firstName": firstName,
         "id": id,
         "lastName": lastName,
-        "phoneNum": phoneNum,
+        "sex": sex,
+        "userHeight": userHeight,
         "userLogin": userLogin.toJson(),
+        "userWeight": userWeight,
         "username": username,
       };
 }

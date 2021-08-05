@@ -20,8 +20,7 @@ public class UserInfo {
     private UserLogin userLogin;
     private String firstName;
     private String lastName;
-    private String email;
-    private String phoneNum;
+    private String sex;
     private double userHeight;
     private double userWeight;
     private String username;

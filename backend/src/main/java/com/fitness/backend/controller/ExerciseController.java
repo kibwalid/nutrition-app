@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/exercise")
+@RequestMapping("api/exercise")
 public class ExerciseController {
 
     private final ExerciseServices exerciseServices;
