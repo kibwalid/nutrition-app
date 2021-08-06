@@ -1,4 +1,5 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/models/user_info.dart';
 import 'package:fitness/models/water_intake.dart';
 import 'package:fitness/providers/calc_providers.dart';
@@ -20,6 +21,7 @@ class LoginScreen extends HookWidget {
     final tracker = context.read(trackerStateProvider);
     final location = context.read(locationStateNotifier);
     final waterIntake = context.read(waterIntakeState);
+    final dietPlanState = context.read(dietPlanProvider);
     UserLogin userLogin = UserLogin();
     Size size = MediaQuery.of(context).size;
     return BackgroundUnlogged(
@@ -90,7 +92,13 @@ class LoginScreen extends HookWidget {
                         authInfo.state = data;
                         tracker.state.currentLocation = data.loggedLocation;
                         location.getCurrentLocation();
+
                         if (authInfo.state != null && data != null) {
+                          DietPlan dietPlan = await CalcServices()
+                              .getActiveDietPlan(authInfo.state);
+                          if (dietPlan != null) {
+                            dietPlanState.state = dietPlan;
+                          }
                           List<WaterTaken> waterIntakes = await CalcServices()
                               .getWaterIntakeOfDay(
                                   authInfo.state.userId, authInfo.state.token);

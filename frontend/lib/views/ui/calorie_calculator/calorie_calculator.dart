@@ -1,5 +1,7 @@
+import 'package:fitness/models/food_intake.dart';
 import 'package:fitness/models/food_item.dart';
 import 'package:fitness/providers/calc_providers.dart';
+import 'package:fitness/providers/user_provider.dart';
 import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:fitness/views/utils/search_bar.dart';
@@ -12,7 +14,10 @@ class CalorieCalculator extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    FoodIntake foodIntake = FoodIntake();
     final foodItemProvider = useProvider(changeState);
+    final dietPlan = context.read(dietPlanProvider);
+    final authInfo = context.read(authInfoProvider);
     Size size = MediaQuery.of(context).size;
     String query = "";
 
@@ -104,6 +109,37 @@ class CalorieCalculator extends HookWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     ListTile(
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.add),
+                                        onPressed: () async {
+                                          foodIntake.calorieTaken =
+                                              foodItemProvider
+                                                  .state.items[index].calories;
+                                          foodIntake.foodName = foodItemProvider
+                                              .state.items[index].name;
+                                          foodIntake.date =
+                                              DateTime.now().toString();
+                                          foodIntake.dietId =
+                                              dietPlan.state.dietId;
+                                          bool response = await CalcServices()
+                                              .addFoodIntake(
+                                                  foodIntake, authInfo.state);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Row(
+                                              children: <Widget>[
+                                                Text(() {
+                                                  if (response) {
+                                                    return "Food has been added to you Diet";
+                                                  } else {
+                                                    return "Unable to add Food to you Diet";
+                                                  }
+                                                }())
+                                              ],
+                                            ),
+                                          ));
+                                        },
+                                      ),
                                       leading: Icon(Icons.fastfood),
                                       title: Text(
                                           '${foodItemProvider.state.items[index].name}'),

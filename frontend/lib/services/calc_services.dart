@@ -5,6 +5,7 @@ import 'package:fitness/models/auth_info.dart';
 import 'package:fitness/models/calorie_burned_local.dart';
 import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/models/exercise.dart';
+import 'package:fitness/models/food_intake.dart';
 import 'package:fitness/models/food_item.dart';
 import 'package:fitness/models/running_tracker_local.dart';
 import 'package:fitness/models/running_tracker_remote.dart';
@@ -21,6 +22,15 @@ class CalcServices {
       foodItem.totalCal += element.calories;
     });
     return foodItem;
+  }
+
+  Future<bool> addFoodIntake(FoodIntake foodIntake, AuthInfo authInfo) async {
+    Map<String, dynamic> response = await Api().postWithToken(
+        "$API_URI/api/food/", authInfo.token, foodIntake.toJson());
+    if (response['message'] == null) {
+      return true;
+    }
+    return false;
   }
 
   Future<List<WaterTaken>> getWaterIntakeOfDay(String userID, token) async {
