@@ -124,6 +124,7 @@ class CalcServices {
   Future<List<Tracker>> getAllTrackedRun(AuthInfo authInfo) async {
     List<dynamic> response = await Api().getAll(
         "$API_URI/api/exercise/running/all/${authInfo.userId}", authInfo.token);
+    print("test");
     List<Tracker> trackerList = [];
     response.forEach((element) {
       Tracker tracker = Tracker();

@@ -14,6 +14,7 @@ class TrackHistory extends HookWidget {
     onload() async {
       List<Tracker> trackerList =
           await CalcServices().getAllTrackedRun(authInfo.state);
+
       return trackerList;
     }
 

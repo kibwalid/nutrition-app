@@ -62,12 +62,12 @@ public class ExerciseController {
         return exerciseServices.getSingleTrackedRun(id);
     }
 
-    @GetMapping("/all/{dietId}")
+    @GetMapping("/all/diet/{dietId}")
     public List<ExerciseInfo> getAllExerciseOfDiet(@PathVariable String dietId){
         return exerciseServices.getAllExerciseOfDiet(dietId);
     }
 
-    @GetMapping("/running/all/{dietId}")
+    @GetMapping("/running/all/diet/{dietId}")
     public List<RunTrackedInfo> getAllRunningOfDiet(@PathVariable String dietId){
         return exerciseServices.getAllRunningDataOfDiet(dietId);
     }
