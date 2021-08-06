@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,10 +32,11 @@ public class DietPlanServices {
     }
 
     public DietPlan getActiveDietPlan(int userID) {
-        try {
-            return dietPlannerRepository.findAllByUserIdAndStatus(userID, 1).get(0);
-        } catch (Exception e){
-            throw new AppException("There isn't any Diet plan active for this user!", HttpStatus.NOT_FOUND);
+        List<DietPlan> dietPlanList = dietPlannerRepository.findAllByUserIdAndStatus(userID, 1);
+        System.out.println(dietPlanList);
+        if(dietPlanList.isEmpty()){
+            throw new AppException("There are no active diet plan!", HttpStatus.NOT_FOUND);
         }
+        return dietPlanList.get(0);
     }
 }

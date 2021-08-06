@@ -12,6 +12,7 @@ class DietPlanner extends HookWidget {
 
     onload() async {
       bool dietActive = await CalcServices().checkDietActivity(authInfo.state);
+      print(dietActive);
       return dietActive;
     }
 

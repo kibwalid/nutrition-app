@@ -171,8 +171,10 @@ class CalcServices {
   }
 
   Future<bool> checkDietActivity(AuthInfo authInfo) async {
-    Map<String, dynamic> response =
-        await Api().get("$API_URI/api/diet/${authInfo.userId}", authInfo.token);
+    String json = await Api()
+        .get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
+    Map<String, dynamic> response = jsonDecode(json);
+    print(response);
     if (response["message"] == null) {
       return true;
     }
@@ -191,7 +193,8 @@ class CalcServices {
 
   Future<DietPlan> addDietPlan(DietPlan dietPlan, AuthInfo authInfo) async {
     Map<String, dynamic> response = await Api()
-        .postWithToken("$API_URI/", authInfo.token, dietPlan.toJson());
+        .postWithToken("$API_URI/api/diet/", authInfo.token, dietPlan.toJson());
+    print(response);
     if (response["message"] == null) {
       return DietPlan.fromJson(response);
     }

@@ -12,18 +12,20 @@ class DietPlan {
     this.id,
     this.startDate,
     this.userId,
+    this.status,
     this.weightNow,
     this.weightTarget,
   });
 
-  int caloriePerDay;
+  double caloriePerDay;
   String dietId;
   String endDate;
   int id;
   String startDate;
   int userId;
-  int weightNow;
-  int weightTarget;
+  int status;
+  double weightNow;
+  double weightTarget;
 
   factory DietPlan.fromJson(Map<String, dynamic> json) => DietPlan(
         caloriePerDay: json["caloriePerDay"],
@@ -34,6 +36,7 @@ class DietPlan {
         userId: json["userId"],
         weightNow: json["weightNow"],
         weightTarget: json["weightTarget"],
+        status: json['status'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +48,6 @@ class DietPlan {
         "userId": userId,
         "weightNow": weightNow,
         "weightTarget": weightTarget,
+        "status": status
       };
 }

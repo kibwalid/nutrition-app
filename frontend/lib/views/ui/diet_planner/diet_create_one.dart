@@ -1,7 +1,9 @@
 import 'package:fitness/config/theme.dart';
+import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/models/user_info.dart';
 import 'package:fitness/providers/calc_providers.dart';
 import 'package:fitness/providers/user_provider.dart';
+import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/services/user_services.dart';
 import 'package:fitness/views/utils/background.dart';
 import 'package:fitness/views/utils/rounded_button.dart';
@@ -15,6 +17,7 @@ class DietCreateOne extends HookWidget {
     final authInfo = context.read(authInfoProvider);
     final fintesGoal = useProvider(fitnessGoalSelectState);
     final fitnesDuration = useProvider(fitnesDurationState);
+    DietPlan dietPlan = DietPlan();
     onload() async {
       UserInfo userInfo =
           await UserServices().getCurrentUserInfo(authInfo.state);
@@ -24,6 +27,11 @@ class DietCreateOne extends HookWidget {
     Size size = MediaQuery.of(context).size;
     return Background(
       leading: BackButton(
+        onPressed: () {
+          Navigator.pop(context);
+          fitnesDuration.state = "1 Week";
+          fintesGoal.state = 0;
+        },
         color: Colors.black,
       ),
       header: "",
@@ -288,7 +296,119 @@ class DietCreateOne extends HookWidget {
                             children: [
                               RoundedButton(
                                 color: Colors.black,
-                                press: () {},
+                                press: () {
+                                  dietPlan.dietId =
+                                      "Diet_Of${authInfo.state.userId}_from_${DateTime.now().day}_${DateTime.now().month}";
+                                  dietPlan.startDate =
+                                      DateTime.now().toString();
+                                  if (fitnesDuration.state.contains("1 Week")) {
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 7))
+                                        .toString();
+                                    if (fintesGoal.state == 1) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 2;
+                                    } else if (fintesGoal.state == 3) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 2;
+                                    } else if (fintesGoal.state == 2) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Row(
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
+                                        ),
+                                      ));
+                                    }
+                                  } else if (fitnesDuration.state
+                                      .contains("2 Week")) {
+                                    if (fintesGoal.state == 1) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 4;
+                                    } else if (fintesGoal.state == 3) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 4;
+                                    } else if (fintesGoal.state == 2) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Row(
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
+                                        ),
+                                      ));
+                                    }
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 14))
+                                        .toString();
+                                  } else if (fitnesDuration.state
+                                      .contains("3 Week")) {
+                                    if (fintesGoal.state == 1) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 6;
+                                    } else if (fintesGoal.state == 3) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 6;
+                                    } else if (fintesGoal.state == 2) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Row(
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
+                                        ),
+                                      ));
+                                    }
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 21))
+                                        .toString();
+                                  } else {
+                                    if (fintesGoal.state == 1) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 6;
+                                    } else if (fintesGoal.state == 3) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 6;
+                                    } else if (fintesGoal.state == 2) {
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Row(
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
+                                        ),
+                                      ));
+                                    }
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 30))
+                                        .toString();
+                                  }
+                                  dietPlan.weightNow = snapshot.data.userWeight;
+                                  dietPlan.status = 1;
+                                  dietPlan.userId =
+                                      int.parse(authInfo.state.userId);
+                                  dietPlan.caloriePerDay =
+                                      snapshot.data.userWeight *
+                                          0.9 *
+                                          24 *
+                                          0.95 *
+                                          1.55;
+                                  CalcServices()
+                                      .addDietPlan(dietPlan, authInfo.state);
+                                },
                                 text: "Submit",
                               ),
                             ],
