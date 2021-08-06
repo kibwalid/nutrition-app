@@ -20,11 +20,11 @@ class DietDetails extends HookWidget {
       DietPlan dietPlan = await CalcServices().getActiveDietPlan(authInfo.state);
 
       List<Calorie> intake = await CalcServices().getAllCalorieIntake(authInfo.state, dietPlan.dietId);
-
+      List<Calorie> burn = await CalcServices().getAllCalorieBurned(authInfo.state, dietPlan.dietId);
       // List<Calorie> burnedList = await CalcServices()
       //     .getAllCalorieBurned(authInfo.state, dietPlan.dietId);
 
-      return {"diet": dietPlan, "intake": intake};
+      return {"diet": dietPlan, "intake": intake, "burn": burn};
     }
 
     return Background(
@@ -47,6 +47,7 @@ class DietDetails extends HookWidget {
                 if (snapshot.hasData) {
                   DietPlan dietPlan = snapshot.data['diet'];
                   List<Calorie> intake = snapshot.data['intake'];
+                  List<Calorie> burn = snapshot.data['burn'];
                   return SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -250,8 +251,8 @@ class DietDetails extends HookWidget {
                                               );
                                             }),
                                         ListView.builder(
-                                            itemCount: 2,
-                                            itemBuilder: (context, snapshot) {
+                                            itemCount: burn.length,
+                                            itemBuilder: (context, index) {
                                               return Container(
                                                 margin: EdgeInsets.symmetric(vertical: 10),
                                                 padding: EdgeInsets.all(10),
@@ -270,15 +271,37 @@ class DietDetails extends HookWidget {
                                                 ),
                                                 child: Row(
                                                   children: <Widget>[
+                                                    burn[index].type == "run" ? SizedBox(width: size.width * 0.012): SizedBox(width: size.width * 0.012),
                                                     Image.network(
-                                                      "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png",
+                                                      () {
+                                                        if (burn[index].type == "run"){
+                                                          return "https://www.freepnglogos.com/uploads/running-png/running-icon-download-icons-35.png";
+                                                        } else {
+                                                          return "https://www.pngrepo.com/png/81526/512/exercise.png";
+                                                        }
+
+                                                      }(),
                                                       scale: size.aspectRatio * 30,
                                                     ),
                                                     SizedBox(width: 20),
                                                     Expanded(
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: <Widget>[],
+                                                        children: <Widget>[
+                                                          Text(
+                                                            burn[index].name,
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                FontWeight.bold),
+                                                          ),
+                                                          SizedBox(
+                                                            height: size.height * 0.0012,
+                                                          ),
+                                                          Text(burn[index].calorie
+                                                              .toStringAsFixed(2) +
+                                                              " KCal")
+                                                        ],
                                                       ),
                                                     ),
                                                     Column(

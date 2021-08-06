@@ -86,7 +86,7 @@ class CalcServices {
       "calorieBurned": tracker.calorieBurned.toString(),
       "counter": tracker.counter,
       "date": DateTime.now().toString(),
-      "dietId": "",
+      "dietId": tracker.dietId,
       "distanceTraveled": tracker.distanceTraveled,
       "locationCords": routeListForDB,
       "userID": int.parse(authInfo.userId)
@@ -204,7 +204,31 @@ class CalcServices {
   }
 
   Future<List<Calorie>> getAllCalorieBurned(AuthInfo authInfo, String dietPlanId) async {
-    List<Map<String, dynamic>> exercise = await Api().getAll("$API_URI/api/food/all/$dietPlanId", authInfo.token);
+    List<dynamic> exercise = await Api().getAll("$API_URI/api/exercise/all/diet/$dietPlanId", authInfo.token);
+    List<Calorie> calories = [];
+    exercise.forEach((element) {
+      Calorie calorie = Calorie();
+      calorie.calorie = element['caloriesBurned'];
+      calorie.date = DateTime.parse(element['date']);
+      calorie.type = "exercise";
+      calorie.name = element['exerciseName'];
+      calories.add(calorie);
+    });
+
+    List<dynamic> running = await Api().getAll("$API_URI/api/exercise/running/all/diet/$dietPlanId", authInfo.token);
+    int i = 1;
+    running.forEach((element) {
+      Calorie calorie = Calorie();
+      calorie.calorie = double.parse(element['calorieBurned']);
+      calorie.date = DateTime.parse(element['date']);
+      calorie.type = "run";
+      calorie.name = "Run $i";
+      calories.add(calorie);
+      i++;
+    });
+
+
+    return calories;
   }
 
   Future<List<Calorie>> getAllCalorieIntake(AuthInfo authInfo, String dietPlanId) async {
@@ -219,13 +243,12 @@ class CalcServices {
       calories.add(calorie);
     });
 
-
     List<dynamic> water = await Api().getAll(
         "$API_URI/api/intake/all/day/${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_water_of_user_${authInfo.userId}",
         authInfo.token);
     print("water");
     water.forEach((element) {
-      if(element['amount'] > 0){
+      if (element['amount'] > 0) {
         Calorie calorie = Calorie();
         calorie.calorie = 0;
         calorie.date = DateTime.parse(element['date']);

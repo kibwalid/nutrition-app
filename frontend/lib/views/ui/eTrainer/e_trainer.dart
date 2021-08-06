@@ -10,6 +10,7 @@ class ETrainer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final authInfo = context.read(authInfoProvider);
+    final dietPlan = context.read(dietPlanProvider);
     Size size = MediaQuery.of(context).size;
     return Background(
       header: "eTrainer",
@@ -40,10 +41,7 @@ class ETrainer extends HookWidget {
                   children: <Widget>[
                     Text(
                       "eTrainer",
-                      style: Theme.of(context)
-                          .textTheme
-                          .display1
-                          .copyWith(fontWeight: FontWeight.w900),
+                      style: Theme.of(context).textTheme.display1.copyWith(fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: size.height * 0.02),
                     Text(
@@ -61,10 +59,7 @@ class ETrainer extends HookWidget {
                     ),
                     Text(
                       "Basic",
-                      style: Theme.of(context)
-                          .textTheme
-                          .title
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -80,6 +75,7 @@ class ETrainer extends HookWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SingleTraining(
+                                        dietId: dietPlan.state.dietId,
                                         authInfo: authInfo.state,
                                         header: "Squats",
                                         videoAsset: "assets/videos/yoga2.mp4",
@@ -94,6 +90,7 @@ class ETrainer extends HookWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SingleTraining(
+                                        dietId: dietPlan.state.dietId,
                                         authInfo: authInfo.state,
                                         header: "Back Stretch",
                                         videoAsset: "assets/videos/yoga.mp4",
@@ -108,6 +105,7 @@ class ETrainer extends HookWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SingleTraining(
+                                        dietId: dietPlan.state.dietId,
                                         authInfo: authInfo.state,
                                         header: "Burpees",
                                         videoAsset: "assets/videos/burpees.mp4",
@@ -122,10 +120,7 @@ class ETrainer extends HookWidget {
                     ),
                     Text(
                       "Intermediate",
-                      style: Theme.of(context)
-                          .textTheme
-                          .title
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: size.height * 0.02,
@@ -161,10 +156,7 @@ class ETrainer extends HookWidget {
                     ),
                     Text(
                       "Extreme",
-                      style: Theme.of(context)
-                          .textTheme
-                          .title
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: size.height * 0.02,

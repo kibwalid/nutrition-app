@@ -13,6 +13,7 @@ class Exercise {
     this.id,
     this.timesDone,
     this.userId,
+    this.dietId,
   });
 
   double caloriesBurned;
@@ -22,6 +23,7 @@ class Exercise {
   int id;
   int timesDone;
   int userId;
+  String dietId;
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
         caloriesBurned: json["caloriesBurned"],
@@ -31,6 +33,7 @@ class Exercise {
         id: json["id"],
         timesDone: json["timesDone"],
         userId: json["userID"],
+        dietId: json["dietId"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class Exercise {
         "id": id,
         "timesDone": timesDone,
         "userID": userId,
+        "dietId": dietId
       };
 }

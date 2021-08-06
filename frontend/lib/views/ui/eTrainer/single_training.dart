@@ -11,8 +11,9 @@ class SingleTraining extends StatefulWidget {
   final String videoAsset;
   final String header;
   final AuthInfo authInfo;
+  final String dietId;
 
-  const SingleTraining({Key key, this.videoAsset, this.header, this.authInfo})
+  const SingleTraining({Key key, this.videoAsset, this.header, this.authInfo, this.dietId})
       : super(key: key);
   @override
   _SingleTrainingState createState() => _SingleTrainingState();
@@ -137,6 +138,7 @@ class _SingleTrainingState extends State<SingleTraining> {
                                                   7.6 * (exercise.counter / 47);
                                               exercise.userId = int.parse(
                                                   widget.authInfo.userId);
+                                              exercise.dietId = widget.dietId;
                                               CalcServices().addExercise(
                                                   exercise,
                                                   widget.authInfo.token);

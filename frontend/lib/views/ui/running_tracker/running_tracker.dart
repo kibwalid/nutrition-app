@@ -22,6 +22,7 @@ class RunningTracker extends HookWidget {
     final trackerStream = useProvider(trackerStreamProvider);
     final runAction = useProvider(actionStateProvider);
     final authInfo = context.read(authInfoProvider);
+    final dietInfo = context.read(dietPlanProvider);
 
     return Background(
       actions: [
@@ -339,6 +340,7 @@ class RunningTracker extends HookWidget {
                                 ],
                               ),
                             ));
+                            tracker.state.dietId = dietInfo.state.dietId;
                             CalcServices()
                                 .addRunningData(authInfo.state, tracker.state);
                             runAction.state = false;
