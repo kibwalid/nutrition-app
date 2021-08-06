@@ -21,4 +21,5 @@ public class ExerciseInfo {
     private int counter;
     private int timesDone;
     private String date;
+    private String dietId;
 }

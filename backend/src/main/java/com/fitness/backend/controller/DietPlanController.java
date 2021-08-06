@@ -4,6 +4,8 @@ import com.fitness.backend.models.DietPlan;
 import com.fitness.backend.services.DietPlanServices;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/diet")
 public class DietPlanController {
@@ -28,4 +30,6 @@ public class DietPlanController {
     public DietPlan getActiveDietPlan(@PathVariable int userID){
         return dietPlanServices.getActiveDietPlan(userID);
     }
+
+
 }

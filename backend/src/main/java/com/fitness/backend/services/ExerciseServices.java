@@ -1,6 +1,7 @@
 package com.fitness.backend.services;
 
 import com.fitness.backend.exceptions.AppException;
+import com.fitness.backend.models.DietPlan;
 import com.fitness.backend.models.ExerciseInfo;
 import com.fitness.backend.models.RunTrackedInfo;
 import com.fitness.backend.repositories.ExerciseInfoRepository;
@@ -90,6 +91,22 @@ public class ExerciseServices {
             return runTrackedInfo.get();
         } catch (Exception e){
             throw new AppException("Server Error: Cannot get tracked data", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public List<ExerciseInfo> getAllExerciseOfDiet(String dietId) {
+        try{
+            return exerciseInfoRepository.findAllByDietId(dietId);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot get any exercise from database", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public List<RunTrackedInfo> getAllRunningDataOfDiet(String dietId) {
+        try{
+            return runTrackedDataRepository.findAllByDietId(dietId);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot get any exercise from database", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

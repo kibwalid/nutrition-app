@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fitness/config/constants.dart';
 import 'package:fitness/models/auth_info.dart';
+import 'package:fitness/models/calorie_burned_local.dart';
 import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/models/food_item.dart';
@@ -182,8 +183,8 @@ class CalcServices {
   }
 
   Future<DietPlan> getActiveDietPlan(AuthInfo authInfo) async {
-    String json =
-        await Api().get("$API_URI/api/diet/${authInfo.userId}", authInfo.token);
+    String json = await Api()
+        .get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
     Map<String, dynamic> response = jsonDecode(json);
     if (response["message"] == null) {
       return DietPlan.fromJson(response);
@@ -199,5 +200,11 @@ class CalcServices {
       return DietPlan.fromJson(response);
     }
     return null;
+  }
+
+  Future<List<Calorie>> getAllCalorieBurned(
+      AuthInfo authInfo, String dietPlanId) async {
+    List<Map<String, dynamic>> exercise =
+        await Api().getAll("$API_URI", authInfo.token);
   }
 }

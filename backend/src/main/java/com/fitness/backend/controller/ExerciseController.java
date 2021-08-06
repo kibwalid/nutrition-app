@@ -1,5 +1,6 @@
 package com.fitness.backend.controller;
 
+import com.fitness.backend.models.DietPlan;
 import com.fitness.backend.models.ExerciseInfo;
 import com.fitness.backend.models.RunTrackedInfo;
 import com.fitness.backend.services.ExerciseServices;
@@ -60,4 +61,15 @@ public class ExerciseController {
     public RunTrackedInfo getSingleTrackedRun(@PathVariable int id) {
         return exerciseServices.getSingleTrackedRun(id);
     }
+
+    @GetMapping("/all/{dietId}")
+    public List<ExerciseInfo> getAllExerciseOfDiet(@PathVariable String dietId){
+        return exerciseServices.getAllExerciseOfDiet(dietId);
+    }
+
+    @GetMapping("/running/all/{dietId}")
+    public List<RunTrackedInfo> getAllRunningOfDiet(@PathVariable String dietId){
+        return exerciseServices.getAllRunningDataOfDiet(dietId);
+    }
+
 }
