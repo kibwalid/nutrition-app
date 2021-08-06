@@ -105,7 +105,10 @@ class Dashboard extends HookWidget {
                                   DashboardCard(
                                     title: "Diet Planner",
                                     imgSrc: "assets/icons/meal_plan.png",
-                                    press: () {},
+                                    press: () {
+                                      Navigator.pushNamed(
+                                          context, "/diet/plan");
+                                    },
                                   ),
                                   DashboardCard(
                                     title: "Profile",

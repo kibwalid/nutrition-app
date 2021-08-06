@@ -2,6 +2,8 @@ import 'package:fitness/views/ui/auth/login_screen.dart';
 import 'package:fitness/views/ui/auth/register_screen.dart';
 import 'package:fitness/views/ui/calorie_calculator/calorie_calculator.dart';
 import 'package:fitness/views/ui/dashboard/dashboard.dart';
+import 'package:fitness/views/ui/diet_planner/diet_create_one.dart';
+import 'package:fitness/views/ui/diet_planner/diet_planner.dart';
 import 'package:fitness/views/ui/eTrainer/e_trainer.dart';
 import 'package:fitness/views/ui/eTrainer/exercise_history.dart';
 import 'package:fitness/views/ui/eTrainer/single_training.dart';
@@ -27,4 +29,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/exercise/history": (BuildContext context) => ExerciseHistory(),
   "/water/intake": (BuildContext context) => WaterIntake(),
   "/water/history": (BuildContext context) => IntakeHistory(),
+  "/diet/plan": (BuildContext context) => DietPlanner(),
+  "/diet/create/one": (BuildContext context) => DietCreateOne(),
 };

@@ -171,9 +171,8 @@ class CalcServices {
   }
 
   Future<bool> checkDietActivity(AuthInfo authInfo) async {
-    String json =
+    Map<String, dynamic> response =
         await Api().get("$API_URI/api/diet/${authInfo.userId}", authInfo.token);
-    Map<String, dynamic> response = jsonDecode(json);
     if (response["message"] == null) {
       return true;
     }
