@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -24,6 +25,14 @@ public class FoodIntakeServices {
             return foodIntakeRepository.saveAndFlush(foodIntake);
         } catch (Exception e) {
             throw new AppException("Server Error: Cannot add Food Intake", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public List<FoodIntake> getAllFoodIntakeOfDiet(String dietId) {
+        try{
+            return foodIntakeRepository.findAllByDietId(dietId);
+        } catch (Exception e){
+            throw new AppException("Cannot fetch data", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

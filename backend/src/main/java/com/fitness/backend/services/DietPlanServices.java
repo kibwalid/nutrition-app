@@ -35,7 +35,7 @@ public class DietPlanServices {
         List<DietPlan> dietPlanList = dietPlannerRepository.findAllByUserIdAndStatus(userID, 1);
         System.out.println(dietPlanList);
         if(dietPlanList.isEmpty()){
-            throw new AppException("There are no active diet plan!", HttpStatus.NOT_FOUND);
+            return null;
         }
         return dietPlanList.get(0);
     }

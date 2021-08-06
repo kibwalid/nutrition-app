@@ -30,4 +30,9 @@ public class WaterIntakeController {
     public List<WaterIntake> getAllWaterIntake(@PathVariable int userId){
         return waterIntakeServices.getAllWaterIntake(userId);
     }
+
+    @GetMapping("/all/day/{dayId}")
+    public List<WaterIntake> getAllWaterIntakeOfDay(@PathVariable String dayId){
+        return waterIntakeServices.getAllWaterIntakeOfDay(dayId);
+    }
 }

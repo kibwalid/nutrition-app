@@ -26,11 +26,10 @@ class WaterIntake extends HookWidget {
     WaterTaken waterTaken = WaterTaken();
     Size size = MediaQuery.of(context).size;
     onload() async {
-      Map<String, dynamic> response = await Api().getFromWeather(
-          "${location.currentLocation.latitude},${location.currentLocation.longitude}");
+      Map<String, dynamic> response =
+          await Api().getFromWeather("${location.currentLocation.latitude},${location.currentLocation.longitude}");
 
-      UserInfo userInfo =
-          await UserServices().getCurrentUserInfo(authInfo.state);
+      UserInfo userInfo = await UserServices().getCurrentUserInfo(authInfo.state);
       return {"weather": response, "user": userInfo};
     }
 
@@ -53,9 +52,7 @@ class WaterIntake extends HookWidget {
               double waterNeeded = userInfo.userWeight / 30;
               double waterPercent = 0;
               if (waterIntake.state != 0) {
-                waterPercent = waterNeeded / waterIntake.state;
-                waterPercent = 1 - waterPercent;
-                print(waterPercent);
+                waterPercent = waterIntake.state/ (waterNeeded * 1000);
               }
 
               return Stack(children: <Widget>[
@@ -95,10 +92,7 @@ class WaterIntake extends HookWidget {
                             ),
                             Text(
                               "Water Intake Tracker",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30),
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
                             ),
                             SizedBox(
                               height: size.height * 0.06,
@@ -118,14 +112,10 @@ class WaterIntake extends HookWidget {
                                       ),
                                       Text(
                                         "${(waterIntake.state / 1000).toStringAsFixed(2)}L",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 40),
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                                       ),
-                                      Text(DateFormat.yMMMMd('en_US')
-                                          .format(DateTime.now())),
-                                      Text(
-                                          "Total ${waterNeeded.toStringAsFixed(2)}L water needed for today")
+                                      Text(DateFormat.yMMMMd('en_US').format(DateTime.now())),
+                                      Text("Total ${waterNeeded.toStringAsFixed(2)}L water needed for today")
                                     ],
                                   ),
                                 ),
@@ -136,8 +126,7 @@ class WaterIntake extends HookWidget {
                             ),
                             Text(
                               "Weather",
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w600),
+                              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 20),
@@ -159,36 +148,24 @@ class WaterIntake extends HookWidget {
                                 children: <Widget>[
                                   Column(
                                     children: [
-                                      Image.network("http:" +
-                                          snapshot.data['weather']["current"]
-                                              ['condition']['icon']),
-                                      Text(snapshot.data['weather']["current"]
-                                          ['condition']['text'])
+                                      Image.network("http:" + snapshot.data['weather']["current"]['condition']['icon']),
+                                      Text(snapshot.data['weather']["current"]['condition']['text'])
                                     ],
                                   ),
                                   SizedBox(width: 20),
                                   Expanded(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          snapshot.data['weather']["current"]
-                                                      ['temp_c']
-                                                  .toString() +
-                                              " Celsius",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle,
+                                          snapshot.data['weather']["current"]['temp_c'].toString() + " Celsius",
+                                          style: Theme.of(context).textTheme.subtitle,
                                         ),
                                         Text(
                                             "Feels like: ${snapshot.data['weather']["current"]['feelslike_c'] - 4} Celsius"),
                                         Text(() {
-                                          if (snapshot.data['weather']
-                                                  ["current"]['temp_c'] >
-                                              30) {
+                                          if (snapshot.data['weather']["current"]['temp_c'] > 30) {
                                             return "Its hot outside, Make sure to drink more water than usual";
                                           } else {
                                             return "Its cold outside, Stay hydrated";
@@ -220,12 +197,10 @@ class WaterIntake extends HookWidget {
                                     InputTextField(
                                       label: 'Liquid Type',
                                       onSaved: (value) {
-                                        waterTaken.liquidType =
-                                            value.toString();
+                                        waterTaken.liquidType = value.toString();
                                       },
                                       validator: (value) {
-                                        if (value.length == 0)
-                                          return ("Liquid Type is required");
+                                        if (value.length == 0) return ("Liquid Type is required");
                                       },
                                     ),
                                     SizedBox(
@@ -235,8 +210,7 @@ class WaterIntake extends HookWidget {
                                       label: 'Amount',
                                       keyboardType: TextInputType.number,
                                       validator: (value) {
-                                        if (value.length == 0)
-                                          return ("Amount is required");
+                                        if (value.length == 0) return ("Amount is required");
                                       },
                                       onSaved: (value) {
                                         waterTaken.amount = double.parse(value);
@@ -251,16 +225,15 @@ class WaterIntake extends HookWidget {
                                       press: () async {
                                         if (formKey.currentState.validate()) {
                                           formKey.currentState.save();
+                                          waterTaken.waterIntakeId =
+                                              "${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_water_of_user_${authInfo.state.userId}";
                                           WaterTaken waterFromDB =
-                                              await CalcServices().addWater(
-                                                  waterTaken, authInfo.state);
+                                              await CalcServices().addWater(waterTaken, authInfo.state);
                                           if (waterFromDB != null) {
-                                            waterIntake.state +=
-                                                waterFromDB.amount;
+                                            waterIntake.state += waterFromDB.amount;
                                             Navigator.pop(context);
                                             Navigator.pop(context);
-                                            Navigator.pushNamed(
-                                                context, "/water/intake");
+                                            Navigator.pushNamed(context, "/water/intake");
                                           }
                                         }
                                       },

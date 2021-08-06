@@ -104,12 +104,15 @@ class LoginScreen extends HookWidget {
                                   authInfo.state.userId, authInfo.state.token);
                           List<WaterTaken> waterTaken = await CalcServices()
                               .getAllWaterIntake(authInfo.state);
-                          waterTaken.forEach((element) {
-                            waterIntake.state += element.amount;
-                          });
-                          waterIntakes.forEach((element) {
-                            waterIntake.state += element.amount;
-                          });
+                          if(waterTaken != null){
+                            waterTaken.forEach((element) {
+                              waterIntake.state += element.amount;
+                            });
+                            waterIntakes.forEach((element) {
+                              waterIntake.state += element.amount;
+                            });
+                          }
+
                           Navigator.pushNamedAndRemoveUntil(context,
                               '/dashboard', (Route<dynamic> route) => false);
                         } else {

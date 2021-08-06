@@ -14,14 +14,17 @@ class DietDetails extends HookWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final authInfo = context.read(authInfoProvider);
+    final dietPlan = context.read(dietPlanProvider);
 
     onload() async {
-      DietPlan dietPlan =
-          await CalcServices().getActiveDietPlan(authInfo.state);
+      DietPlan dietPlan = await CalcServices().getActiveDietPlan(authInfo.state);
+
+      List<Calorie> intake = await CalcServices().getAllCalorieIntake(authInfo.state, dietPlan.dietId);
+
       // List<Calorie> burnedList = await CalcServices()
       //     .getAllCalorieBurned(authInfo.state, dietPlan.dietId);
 
-      return dietPlan;
+      return {"diet": dietPlan, "intake": intake};
     }
 
     return Background(
@@ -42,7 +45,8 @@ class DietDetails extends HookWidget {
               future: onload(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  DietPlan dietPlan = snapshot.data;
+                  DietPlan dietPlan = snapshot.data['diet'];
+                  List<Calorie> intake = snapshot.data['intake'];
                   return SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,11 +61,8 @@ class DietDetails extends HookWidget {
                             children: [
                               Text("Today"),
                               Text(
-                                DateFormat.yMMMMd('en_US')
-                                    .format(DateTime.now()),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                DateFormat.yMMMMd('en_US').format(DateTime.now()),
+                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -73,10 +74,7 @@ class DietDetails extends HookWidget {
                             children: [
                               Text(
                                 "Daily Calorie Burn Quota: 30%",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                               )
                             ],
                           ),
@@ -98,9 +96,7 @@ class DietDetails extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.orangeAccent),
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.orangeAccent),
                                       child: Image.network(
                                         "https://static.thenounproject.com/png/512375-200.png",
                                         scale: size.aspectRatio * 8,
@@ -115,8 +111,7 @@ class DietDetails extends HookWidget {
                                     ),
                                     Text(
                                       () {
-                                        if (dietPlan.weightNow >
-                                            dietPlan.weightTarget) {
+                                        if (dietPlan.weightNow > dietPlan.weightTarget) {
                                           return "${(dietPlan.caloriePerDay * 0.3).toStringAsFixed(2)}";
                                         } else {
                                           return "${(dietPlan.caloriePerDay * 0.12).toStringAsFixed(2)}";
@@ -136,9 +131,7 @@ class DietDetails extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.redAccent),
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.redAccent),
                                       child: Image.network(
                                         "https://img.icons8.com/color/452/healthy-food-calories-calculator.png",
                                         scale: size.aspectRatio * 20,
@@ -186,24 +179,21 @@ class DietDetails extends HookWidget {
                                     height: size.height * 0.38,
                                     decoration: BoxDecoration(
                                       border: Border(
-                                        top: BorderSide(
-                                            color: Colors.grey, width: 0.5),
+                                        top: BorderSide(color: Colors.grey, width: 0.5),
                                       ),
                                     ),
                                     child: TabBarView(
                                       children: [
                                         ListView.builder(
-                                            itemCount: 3,
-                                            itemBuilder: (context, snapshot) {
+                                            itemCount: intake.length,
+                                            itemBuilder: (context, index) {
                                               return Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10),
+                                                margin: EdgeInsets.symmetric(vertical: 10),
                                                 padding: EdgeInsets.all(10),
-                                                height: size.height * 0.08,
+                                                height: size.height * 0.1,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(13),
+                                                  borderRadius: BorderRadius.circular(13),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       offset: Offset(0, 17),
@@ -215,26 +205,44 @@ class DietDetails extends HookWidget {
                                                 ),
                                                 child: Row(
                                                   children: <Widget>[
+                                                    intake[index].type == "food" ? SizedBox(width: size.width * 0.012): SizedBox(),
                                                     Image.network(
-                                                      "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png",
-                                                      scale:
-                                                          size.aspectRatio * 30,
+                                                      () {
+                                                        if (intake[index].type == "water") {
+                                                          return "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png";
+                                                        } else {
+                                                          return "https://i.pinimg.com/originals/95/0d/1a/950d1aaefee57bcfe67e5b9d9cbb35ca.png";
+                                                        }
+                                                      }(),
+                                                      scale: intake[index].type == "water" ? size.aspectRatio * 30 : size.aspectRatio * 23,
                                                     ),
                                                     SizedBox(width: 20),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[],
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          SizedBox(
+                                                            height: size.height * 0.01,
+                                                          ),
+                                                          Text(
+                                                            intake[index].name,
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                FontWeight.bold),
+                                                          ),
+                                                          SizedBox(
+                                                            height: size.height * 0.0012,
+                                                          ),
+                                                          Text(intake[index].calorie
+                                                              .toString() +
+                                                              " KCal")
+                                                        ],
                                                       ),
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm(
-                                                                'en_US')
-                                                            .format(DateTime
-                                                                .now())),
+                                                        Text(DateFormat.jm('en_US').format(DateTime.now())),
                                                       ],
                                                     )
                                                   ],
@@ -245,14 +253,12 @@ class DietDetails extends HookWidget {
                                             itemCount: 2,
                                             itemBuilder: (context, snapshot) {
                                               return Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10),
+                                                margin: EdgeInsets.symmetric(vertical: 10),
                                                 padding: EdgeInsets.all(10),
                                                 height: size.height * 0.08,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(13),
+                                                  borderRadius: BorderRadius.circular(13),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       offset: Offset(0, 17),
@@ -266,24 +272,18 @@ class DietDetails extends HookWidget {
                                                   children: <Widget>[
                                                     Image.network(
                                                       "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png",
-                                                      scale:
-                                                          size.aspectRatio * 30,
+                                                      scale: size.aspectRatio * 30,
                                                     ),
                                                     SizedBox(width: 20),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: <Widget>[],
                                                       ),
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm(
-                                                                'en_US')
-                                                            .format(DateTime
-                                                                .now())),
+                                                        Text(DateFormat.jm('en_US').format(DateTime.now())),
                                                       ],
                                                     )
                                                   ],

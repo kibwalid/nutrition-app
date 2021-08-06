@@ -45,4 +45,12 @@ public class WaterIntakeServices {
             throw new AppException("Server Error: Cannot fetch all water intake of user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public List<WaterIntake> getAllWaterIntakeOfDay(String dayId) {
+        try{
+            return waterIntakeRepository.findAllByWaterIntakeId(dayId);
+        } catch (Exception e){
+            throw new AppException("Server Error: Cannot fetch all water intake of user", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
