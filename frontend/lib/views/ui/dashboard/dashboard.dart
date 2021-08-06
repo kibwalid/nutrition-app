@@ -113,7 +113,9 @@ class Dashboard extends HookWidget {
                                   DashboardCard(
                                     title: "Profile",
                                     imgSrc: "assets/icons/sleep_timer.png",
-                                    press: () {},
+                                    press: () {
+                                      Navigator.pushNamed(context, "/profile");
+                                    },
                                   ),
                                 ],
                               ),

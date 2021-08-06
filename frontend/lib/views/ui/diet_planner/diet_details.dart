@@ -48,6 +48,18 @@ class DietDetails extends HookWidget {
                   DietPlan dietPlan = snapshot.data['diet'];
                   List<Calorie> intake = snapshot.data['intake'];
                   List<Calorie> burn = snapshot.data['burn'];
+                  double burnQuota = 0.0;
+                  double burned = 0;
+                  double burnedPercent = 0;
+                  burn.forEach((element) {
+                    burned += element.calorie;
+                  });
+                  if (dietPlan.weightNow > dietPlan.weightTarget) {
+                    burnQuota = (dietPlan.caloriePerDay * 0.3);
+                  } else {
+                    burnQuota = (dietPlan.caloriePerDay * 0.12);
+                  }
+                  burnedPercent = burned / burnQuota;
                   return SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -74,7 +86,7 @@ class DietDetails extends HookWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Daily Calorie Burn Quota: 30%",
+                                "Daily Calorie Burn Quota: ${(burnedPercent * 100).toStringAsFixed(2)}%",
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                               )
                             ],
@@ -84,7 +96,7 @@ class DietDetails extends HookWidget {
                           ),
                           LinearPercentIndicator(
                             progressColor: Colors.black38,
-                            percent: 0.3,
+                            percent: burnedPercent,
                           ),
                           SizedBox(
                             height: size.height * 0.04,
@@ -111,13 +123,7 @@ class DietDetails extends HookWidget {
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                     Text(
-                                      () {
-                                        if (dietPlan.weightNow > dietPlan.weightTarget) {
-                                          return "${(dietPlan.caloriePerDay * 0.3).toStringAsFixed(2)}";
-                                        } else {
-                                          return "${(dietPlan.caloriePerDay * 0.12).toStringAsFixed(2)}";
-                                        }
-                                      }(),
+                                      "${burnQuota.toStringAsFixed(2)}",
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     Text(
@@ -243,7 +249,7 @@ class DietDetails extends HookWidget {
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm('en_US').format(DateTime.now())),
+                                                        Text(DateFormat.jm('en_US').format(intake[index].date)),
                                                       ],
                                                     )
                                                   ],
@@ -306,7 +312,7 @@ class DietDetails extends HookWidget {
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm('en_US').format(DateTime.now())),
+                                                        Text(DateFormat.jm('en_US').format(burn[index].date)),
                                                       ],
                                                     )
                                                   ],
