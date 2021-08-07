@@ -25,8 +25,8 @@ class CalcServices {
   }
 
   Future<bool> addFoodIntake(FoodIntake foodIntake, AuthInfo authInfo) async {
-    Map<String, dynamic> response =
-        await Api().postWithToken("$API_URI/api/food/", authInfo.token, foodIntake.toJson());
+    Map<String, dynamic> response = await Api().postWithToken(
+        "$API_URI/api/food/", authInfo.token, foodIntake.toJson());
     if (response['message'] == null) {
       return true;
     }
@@ -37,8 +37,10 @@ class CalcServices {
     WaterTaken intake = WaterTaken(
         amount: 0,
         userId: int.parse(userID),
-        waterIntakeId: "${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_of_user_$userID");
-    List<dynamic> response = await Api().postWithToken("$API_URI/api/intake/check", token, intake.toJson());
+        waterIntakeId:
+            "${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_of_user_$userID");
+    List<dynamic> response = await Api()
+        .postWithToken("$API_URI/api/intake/check", token, intake.toJson());
     List<WaterTaken> waterIntakes = [];
     response.forEach((element) {
       waterIntakes.add(WaterTaken.fromJson(element));
@@ -51,8 +53,8 @@ class CalcServices {
     waterTaken.date = DateTime.now().toString();
     waterTaken.waterIntakeId =
         "${DateTime.now().day}_${DateTime.now().month}_${DateTime.now().year}_water_of_user_${authInfo.userId}";
-    Map<String, dynamic> response =
-        await Api().postWithToken("$API_URI/api/intake/add", authInfo.token, waterTaken.toJson());
+    Map<String, dynamic> response = await Api().postWithToken(
+        "$API_URI/api/intake/add", authInfo.token, waterTaken.toJson());
     if (response["message"] == null) {
       return WaterTaken.fromJson(response);
     }
@@ -60,7 +62,8 @@ class CalcServices {
   }
 
   Future<List<WaterTaken>> getAllWaterIntake(AuthInfo authInfo) async {
-    List<dynamic> response = await Api().getAll("$API_URI/api/intake/all/${authInfo.userId}", authInfo.token);
+    List<dynamic> response = await Api()
+        .getAll("$API_URI/api/intake/all/${authInfo.userId}", authInfo.token);
     List<WaterTaken> waterIntakes = [];
     response.forEach((element) {
       if (element['amount'] > 0) {
@@ -73,7 +76,8 @@ class CalcServices {
     return null;
   }
 
-  Future<RunningTrackerRemote> addRunningData(AuthInfo authInfo, Tracker tracker) async {
+  Future<RunningTrackerRemote> addRunningData(
+      AuthInfo authInfo, Tracker tracker) async {
     List<String> routeListForDB = [];
     tracker.routeList.forEach((element) {
       String cords = element.toString().replaceAll("LatLng(latitude:", "");
@@ -92,8 +96,8 @@ class CalcServices {
       "userID": int.parse(authInfo.userId)
     };
 
-    Map<String, dynamic> response =
-        await Api().postWithToken("$API_URI/api/exercise/running/", authInfo.token, jsonData);
+    Map<String, dynamic> response = await Api().postWithToken(
+        "$API_URI/api/exercise/running/", authInfo.token, jsonData);
     if (response['message'] != null) {
       return RunningTrackerRemote.fromJson(response);
     }
@@ -101,7 +105,8 @@ class CalcServices {
   }
 
   Future<Tracker> getRunningTrackedData(String id, AuthInfo authInfo) async {
-    String json = await Api().get("$API_URI/api/exercise/running/$id", authInfo.token);
+    String json =
+        await Api().get("$API_URI/api/exercise/running/$id", authInfo.token);
     Map<String, dynamic> response = jsonDecode(json);
     if (response['message'] == null) {
       Tracker tracker = Tracker();
@@ -127,7 +132,8 @@ class CalcServices {
   }
 
   Future<List<Tracker>> getAllTrackedRun(AuthInfo authInfo) async {
-    List<dynamic> response = await Api().getAll("$API_URI/api/exercise/running/all/${authInfo.userId}", authInfo.token);
+    List<dynamic> response = await Api().getAll(
+        "$API_URI/api/exercise/running/all/${authInfo.userId}", authInfo.token);
     print("test");
     List<Tracker> trackerList = [];
     response.forEach((element) {
@@ -155,7 +161,8 @@ class CalcServices {
 
   Future<Exercise> addExercise(Exercise exercise, String token) async {
     print(exercise.toJson());
-    Map<String, dynamic> response = await Api().postWithToken("$API_URI/api/exercise/", token, exercise.toJson());
+    Map<String, dynamic> response = await Api()
+        .postWithToken("$API_URI/api/exercise/", token, exercise.toJson());
     if (response['message'] == null) {
       return Exercise.fromJson(response);
     }
@@ -163,7 +170,8 @@ class CalcServices {
   }
 
   Future<List<Exercise>> getAllExercise(AuthInfo authInfo) async {
-    List<dynamic> response = await Api().getAll("$API_URI/api/exercise/all/${authInfo.userId}", authInfo.token);
+    List<dynamic> response = await Api()
+        .getAll("$API_URI/api/exercise/all/${authInfo.userId}", authInfo.token);
     List<Exercise> exerciseList = [];
     response.forEach((element) {
       exerciseList.add(Exercise.fromJson(element));
@@ -175,18 +183,27 @@ class CalcServices {
   }
 
   Future<bool> checkDietActivity(AuthInfo authInfo) async {
-    String json = await Api().get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
-    Map<String, dynamic> response = jsonDecode(json);
-    print("test");
-    print(response);
-    if (response["message"] == null) {
-      return true;
+    dynamic json = await Api()
+        .get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
+    try {
+      dynamic response = jsonDecode(json);
+      if (response["message"] == null) {
+        print(json);
+        return true;
+      }
+      return false;
+    } on TypeError catch (_) {
+      if (json["message"] == null) {
+        print(json);
+        return true;
+      }
+      return false;
     }
-    return false;
   }
 
   Future<DietPlan> getActiveDietPlan(AuthInfo authInfo) async {
-    String json = await Api().get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
+    String json = await Api()
+        .get("$API_URI/api/diet/active/${authInfo.userId}", authInfo.token);
     Map<String, dynamic> response = jsonDecode(json);
     if (response["message"] == null) {
       return DietPlan.fromJson(response);
@@ -195,7 +212,8 @@ class CalcServices {
   }
 
   Future<DietPlan> addDietPlan(DietPlan dietPlan, AuthInfo authInfo) async {
-    Map<String, dynamic> response = await Api().postWithToken("$API_URI/api/diet/", authInfo.token, dietPlan.toJson());
+    Map<String, dynamic> response = await Api()
+        .postWithToken("$API_URI/api/diet/", authInfo.token, dietPlan.toJson());
     print(response);
     if (response["message"] == null) {
       return DietPlan.fromJson(response);
@@ -203,8 +221,10 @@ class CalcServices {
     return null;
   }
 
-  Future<List<Calorie>> getAllCalorieBurned(AuthInfo authInfo, String dietPlanId) async {
-    List<dynamic> exercise = await Api().getAll("$API_URI/api/exercise/all/diet/$dietPlanId", authInfo.token);
+  Future<List<Calorie>> getAllCalorieBurned(
+      AuthInfo authInfo, String dietPlanId) async {
+    List<dynamic> exercise = await Api()
+        .getAll("$API_URI/api/exercise/all/diet/$dietPlanId", authInfo.token);
     List<Calorie> calories = [];
     exercise.forEach((element) {
       Calorie calorie = Calorie();
@@ -215,7 +235,8 @@ class CalcServices {
       calories.add(calorie);
     });
 
-    List<dynamic> running = await Api().getAll("$API_URI/api/exercise/running/all/diet/$dietPlanId", authInfo.token);
+    List<dynamic> running = await Api().getAll(
+        "$API_URI/api/exercise/running/all/diet/$dietPlanId", authInfo.token);
     int i = 1;
     running.forEach((element) {
       Calorie calorie = Calorie();
@@ -227,12 +248,13 @@ class CalcServices {
       i++;
     });
 
-
     return calories;
   }
 
-  Future<List<Calorie>> getAllCalorieIntake(AuthInfo authInfo, String dietPlanId) async {
-    List<dynamic> food = await Api().getAll("$API_URI/api/food/all/$dietPlanId", authInfo.token);
+  Future<List<Calorie>> getAllCalorieIntake(
+      AuthInfo authInfo, String dietPlanId) async {
+    List<dynamic> food =
+        await Api().getAll("$API_URI/api/food/all/$dietPlanId", authInfo.token);
     List<Calorie> calories = [];
     food.forEach((element) {
       Calorie calorie = Calorie();

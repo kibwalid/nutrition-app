@@ -90,8 +90,8 @@ class LoginScreen extends HookWidget {
                         ));
                         var data = await UserServices().login(userLogin);
                         authInfo.state = data;
-                        tracker.state.currentLocation = data.loggedLocation;
                         location.getCurrentLocation();
+                        tracker.state.currentLocation = data.loggedLocation;
 
                         if (authInfo.state != null && data != null) {
                           DietPlan dietPlan = await CalcServices()
@@ -104,7 +104,7 @@ class LoginScreen extends HookWidget {
                                   authInfo.state.userId, authInfo.state.token);
                           List<WaterTaken> waterTaken = await CalcServices()
                               .getAllWaterIntake(authInfo.state);
-                          if(waterTaken != null){
+                          if (waterTaken != null) {
                             waterTaken.forEach((element) {
                               waterIntake.state += element.amount;
                             });

@@ -17,12 +17,18 @@ class Profile extends HookWidget {
     final authInfo = context.read(authInfoProvider);
     final dietPlan = context.read(dietPlanProvider);
     onload() async {
-      UserInfo userInfo = await UserServices().getCurrentUserInfo(authInfo.state);
+      UserInfo userInfo =
+          await UserServices().getCurrentUserInfo(authInfo.state);
       return userInfo;
     }
 
     onExLoad() async {
-      List<Calorie> burn = await CalcServices().getAllCalorieBurned(authInfo.state, dietPlan.state.dietId);
+      String dietId = "11";
+      if (dietPlan.state.dietId != null) {
+        dietId = dietPlan.state.dietId;
+      }
+      List<Calorie> burn =
+          await CalcServices().getAllCalorieBurned(authInfo.state, dietId);
       return burn;
     }
 
@@ -46,7 +52,8 @@ class Profile extends HookWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   double bmi = ((snapshot.data.userWeight * 2.20462) /
-                          ((snapshot.data.userHeight * 12) * (snapshot.data.userHeight * 12))) *
+                          ((snapshot.data.userHeight * 12) *
+                              (snapshot.data.userHeight * 12))) *
                       705;
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -55,11 +62,17 @@ class Profile extends HookWidget {
                       children: [
                         Text(
                           "${snapshot.data.firstName} ${snapshot.data.lastName}",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 35),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 35),
                         ),
                         Text(
                           "@${snapshot.data.username}",
-                          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.normal, fontSize: 22),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 22),
                         ),
                         SizedBox(
                           height: size.height * 0.02,
@@ -68,7 +81,10 @@ class Profile extends HookWidget {
                           children: [
                             Text(
                               "Height:  ",
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 22),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 22),
                             ),
                             Text(
                               "${snapshot.data.userHeight} Ft",
@@ -87,7 +103,10 @@ class Profile extends HookWidget {
                           children: [
                             Text(
                               "Weight:  ",
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 22),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 22),
                             ),
                             Text(
                               "${snapshot.data.userWeight} Kg",
@@ -104,7 +123,10 @@ class Profile extends HookWidget {
                         ),
                         Text(
                           "Body Information:  ",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 22),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22),
                         ),
                         SizedBox(
                           height: size.height * 0.02,
@@ -116,7 +138,9 @@ class Profile extends HookWidget {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(6),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.orangeAccent),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.orangeAccent),
                                     child: Icon(
                                       Icons.accessibility_new_outlined,
                                       color: Colors.white,
@@ -145,7 +169,9 @@ class Profile extends HookWidget {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(6),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: primaryColor),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: primaryColor),
                                     child: Icon(
                                       Icons.local_fire_department_sharp,
                                       color: Colors.white,
@@ -175,7 +201,9 @@ class Profile extends HookWidget {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(6),
-                                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.amberAccent),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.amberAccent),
                                     child: Icon(
                                       Icons.height,
                                       color: Colors.white,
@@ -220,7 +248,10 @@ class Profile extends HookWidget {
                         ),
                         Text(
                           "Recent Exercise:  ",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 22),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22),
                         ),
                         FutureBuilder(
                             future: onExLoad(),
@@ -232,12 +263,14 @@ class Profile extends HookWidget {
                                       itemCount: burn.length,
                                       itemBuilder: (context, index) {
                                         return Container(
-                                          margin: EdgeInsets.symmetric(vertical: 10),
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
                                           padding: EdgeInsets.all(10),
                                           height: size.height * 0.08,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.circular(13),
+                                            borderRadius:
+                                                BorderRadius.circular(13),
                                             boxShadow: [
                                               BoxShadow(
                                                 offset: Offset(0, 17),
@@ -250,11 +283,15 @@ class Profile extends HookWidget {
                                           child: Row(
                                             children: <Widget>[
                                               burn[index].type == "run"
-                                                  ? SizedBox(width: size.width * 0.012)
-                                                  : SizedBox(width: size.width * 0.012),
+                                                  ? SizedBox(
+                                                      width: size.width * 0.012)
+                                                  : SizedBox(
+                                                      width:
+                                                          size.width * 0.012),
                                               Image.network(
                                                 () {
-                                                  if (burn[index].type == "run") {
+                                                  if (burn[index].type ==
+                                                      "run") {
                                                     return "https://www.freepnglogos.com/uploads/running-png/running-icon-download-icons-35.png";
                                                   } else {
                                                     return "https://www.pngrepo.com/png/81526/512/exercise.png";
@@ -265,22 +302,33 @@ class Profile extends HookWidget {
                                               SizedBox(width: 20),
                                               Expanded(
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
                                                       burn[index].name,
-                                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
                                                     SizedBox(
-                                                      height: size.height * 0.0012,
+                                                      height:
+                                                          size.height * 0.0012,
                                                     ),
-                                                    Text(burn[index].calorie.toStringAsFixed(2) + " KCal")
+                                                    Text(burn[index]
+                                                            .calorie
+                                                            .toStringAsFixed(
+                                                                2) +
+                                                        " KCal")
                                                   ],
                                                 ),
                                               ),
                                               Column(
                                                 children: [
-                                                  Text(DateFormat.jm('en_US').format(burn[index].date)),
+                                                  Text(DateFormat.jm('en_US')
+                                                      .format(
+                                                          burn[index].date)),
                                                 ],
                                               )
                                             ],

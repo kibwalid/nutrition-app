@@ -46,7 +46,6 @@ class Api {
 
     if (response.statusCode == 200) {
       if (response.body.isNotEmpty) {
-
         return jsonDecode(response.body);
       } else {
         return {'message': 'No data from response string, see http.get'};
