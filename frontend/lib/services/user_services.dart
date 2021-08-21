@@ -52,4 +52,14 @@ class UserServices {
         await Api().get("$API_URI/api/user/${authInfo.userId}", authInfo.token);
     return userInfoFromJson(response);
   }
+
+  Future<UserInfo> updateUserInfo(UserInfo userInfo) async {
+    Map<String, dynamic> response =
+        await Api().put(userInfo.toJson(), "$API_URI/api/user/update/info");
+    print(response);
+    if (response["message"] == null) {
+      return UserInfo.fromJson(response);
+    }
+    return null;
+  }
 }

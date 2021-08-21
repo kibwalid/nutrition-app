@@ -11,9 +11,11 @@ class InputTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.labelColor = Colors.grey,
     this.underLineColor = Colors.grey,
+    this.hintText,
   }) : super(key: key);
 
   final String label;
+  final String hintText;
   final Function onSaved;
   final Function validator;
   final bool password;
@@ -31,6 +33,7 @@ class InputTextField extends StatelessWidget {
       cursorColor: Colors.grey,
       decoration: InputDecoration(
         labelText: label,
+        hintText: hintText,
         labelStyle: TextStyle(color: labelColor),
         border: UnderlineInputBorder(
             borderSide: BorderSide(

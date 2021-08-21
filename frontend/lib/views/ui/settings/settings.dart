@@ -53,6 +53,19 @@ class Settings extends StatelessWidget {
                   ),
                 ),
                 _buildDivider(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/change/profile");
+                  },
+                  child: Container(
+                    child: ListTile(
+                      title: Text('Edit your Information'),
+                      subtitle: Text('Edit Your personal information'),
+                      leading: Icon(Icons.edit),
+                    ),
+                  ),
+                ),
+                _buildDivider(),
               ],
             ),
           ))

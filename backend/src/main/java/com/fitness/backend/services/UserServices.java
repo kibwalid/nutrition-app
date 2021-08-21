@@ -72,6 +72,8 @@ public class UserServices {
         if(updateUserInfo.isPresent()){
             updateUserInfo.get().setFirstName(userInfo.getFirstName());
             updateUserInfo.get().setLastName(userInfo.getLastName());
+            updateUserInfo.get().setUserHeight(userInfo.getUserHeight());
+            updateUserInfo.get().setUserWeight(userInfo.getUserWeight());
             try {
                 return userInfoRepository.saveAndFlush(updateUserInfo.get());
             }catch (Exception e){

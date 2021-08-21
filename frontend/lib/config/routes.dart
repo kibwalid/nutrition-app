@@ -14,6 +14,7 @@ import 'package:fitness/views/ui/running_tracker/running_tracker.dart';
 import 'package:fitness/views/ui/running_tracker/single_tracking.dart';
 import 'package:fitness/views/ui/running_tracker/track_history.dart';
 import 'package:fitness/views/ui/settings/change_password.dart';
+import 'package:fitness/views/ui/settings/edit_info.dart';
 import 'package:fitness/views/ui/settings/settings.dart';
 import 'package:fitness/views/ui/stats/stat_dashboard.dart';
 import 'package:fitness/views/ui/water_intake/intake_history.dart';
@@ -40,5 +41,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/profile": (BuildContext context) => Profile(),
   "/settings": (BuildContext context) => Settings(),
   "/change/password": (BuildContext context) => ChangePassword(),
+  "/change/profile": (BuildContext context) => EditInfo(),
   "/stats": (BuildContext context) => StatDashboard(),
 };

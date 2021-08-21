@@ -88,7 +88,7 @@ class ChangePassword extends StatelessWidget {
                           ),
                         ),
                         RoundedButton(
-                          text: "test",
+                          text: "Reset Password",
                           press: () {},
                         ),
                         SizedBox(
