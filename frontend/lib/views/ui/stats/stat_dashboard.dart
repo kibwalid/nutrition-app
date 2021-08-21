@@ -39,25 +39,68 @@ class StatDashboard extends HookWidget {
             double totalIntake = 0;
             double burnedRunning = 0;
             double burnedExercise = 0;
+            List<_BurnData> data = [
+              _BurnData("Sat", 0),
+              _BurnData("Sun", 0),
+              _BurnData("Mon", 0),
+              _BurnData("Tues", 0),
+              _BurnData("Wed", 0),
+              _BurnData("Thu", 0),
+              _BurnData("Fri", 0),
+            ];
+            List<_IntakeData> intakeData = [
+              _IntakeData("Sat", 0),
+              _IntakeData("Sun", 0),
+              _IntakeData("Mon", 0),
+              _IntakeData("Tues", 0),
+              _IntakeData("Wed", 0),
+              _IntakeData("Thu", 0),
+              _IntakeData("Fri", 0),
+            ];
             intake.forEach((element) {
               totalIntake = totalIntake + element.calorie;
+              if (DateFormat('EEEE').format(element.date) == "Saturday") {
+                intakeData.add(_IntakeData("Sat", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Sunday") {
+                intakeData.add(_IntakeData("Sun", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Monday") {
+                intakeData.add(_IntakeData("Mon", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Tuesday") {
+                intakeData.add(_IntakeData("Tues", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) ==
+                  "Wednesday") {
+                intakeData.add(_IntakeData("Wed", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) ==
+                  "Thursday") {
+                intakeData.add(_IntakeData("Thu", element.calorie));
+              } else {
+                intakeData.add(_IntakeData("Fri", element.calorie));
+              }
             });
             burn.forEach((element) {
+              if (DateFormat('EEEE').format(element.date) == "Saturday") {
+                data.add(_BurnData("Sat", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Sunday") {
+                data.add(_BurnData("Sun", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Monday") {
+                data.add(_BurnData("Mon", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) == "Tuesday") {
+                data.add(_BurnData("Tues", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) ==
+                  "Wednesday") {
+                data.add(_BurnData("Wed", element.calorie));
+              } else if (DateFormat('EEEE').format(element.date) ==
+                  "Thursday") {
+                data.add(_BurnData("Thu", element.calorie));
+              } else {
+                data.add(_BurnData("Fri", element.calorie));
+              }
               if (element.type == "run") {
                 burnedRunning = burnedRunning + element.calorie;
               } else {
                 burnedExercise = burnedExercise + element.calorie;
               }
             });
-            List<_SalesData> data = [
-              _SalesData('Sat', 35),
-              _SalesData('Sun', 28),
-              _SalesData('Mon', 34),
-              _SalesData('Tues', 32),
-              _SalesData('Wed', 40),
-              _SalesData('Thu', 40),
-              _SalesData('Fri', 40)
-            ];
 
             List<_PieData> pieData = [
               _PieData("Intake: Food", totalIntake.toInt()),
@@ -138,14 +181,14 @@ class StatDashboard extends HookWidget {
                                         tooltipBehavior:
                                             TooltipBehavior(enable: true),
                                         series: <
-                                            ChartSeries<_SalesData, String>>[
-                                          LineSeries<_SalesData, String>(
-                                              dataSource: data,
+                                            ChartSeries<_IntakeData, String>>[
+                                          LineSeries<_IntakeData, String>(
+                                              dataSource: intakeData,
                                               xValueMapper:
-                                                  (_SalesData sales, _) =>
+                                                  (_IntakeData sales, _) =>
                                                       sales.year,
                                               yValueMapper:
-                                                  (_SalesData sales, _) =>
+                                                  (_IntakeData sales, _) =>
                                                       sales.sales,
                                               name: 'Calorie Burned',
                                               // Enable data label
@@ -164,14 +207,14 @@ class StatDashboard extends HookWidget {
                                         tooltipBehavior:
                                             TooltipBehavior(enable: true),
                                         series: <
-                                            ChartSeries<_SalesData, String>>[
-                                          LineSeries<_SalesData, String>(
+                                            ChartSeries<_BurnData, String>>[
+                                          LineSeries<_BurnData, String>(
                                               dataSource: data,
                                               xValueMapper:
-                                                  (_SalesData sales, _) =>
-                                                      sales.year,
+                                                  (_BurnData sales, _) =>
+                                                      sales.day,
                                               yValueMapper:
-                                                  (_SalesData sales, _) =>
+                                                  (_BurnData sales, _) =>
                                                       sales.sales,
                                               name: 'Calorie Burned',
                                               // Enable data label
@@ -208,8 +251,15 @@ class StatDashboard extends HookWidget {
   }
 }
 
-class _SalesData {
-  _SalesData(this.year, this.sales);
+class _BurnData {
+  _BurnData(this.day, this.sales);
+
+  final String day;
+  final double sales;
+}
+
+class _IntakeData {
+  _IntakeData(this.year, this.sales);
 
   final String year;
   final double sales;
