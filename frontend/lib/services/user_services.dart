@@ -7,6 +7,17 @@ import 'package:latlong/latlong.dart';
 import 'package:location/location.dart' as lct;
 
 class UserServices {
+  String greeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Morning';
+    }
+    if (hour < 17) {
+      return 'Afternoon';
+    }
+    return 'Evening';
+  }
+
   Future<AuthInfo> login(UserLogin userLogin) async {
     LocationServices().resetLocationService();
     Map<String, dynamic> response =

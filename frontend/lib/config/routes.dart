@@ -13,6 +13,9 @@ import 'package:fitness/views/ui/profile/profile.dart';
 import 'package:fitness/views/ui/running_tracker/running_tracker.dart';
 import 'package:fitness/views/ui/running_tracker/single_tracking.dart';
 import 'package:fitness/views/ui/running_tracker/track_history.dart';
+import 'package:fitness/views/ui/settings/change_password.dart';
+import 'package:fitness/views/ui/settings/settings.dart';
+import 'package:fitness/views/ui/stats/stat_dashboard.dart';
 import 'package:fitness/views/ui/water_intake/intake_history.dart';
 import 'package:fitness/views/ui/water_intake/water_intake.dart';
 import 'package:flutter/widgets.dart';
@@ -35,4 +38,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/diet/create/one": (BuildContext context) => DietCreateOne(),
   "/diet/plan/details": (BuildContext context) => DietDetails(),
   "/profile": (BuildContext context) => Profile(),
+  "/settings": (BuildContext context) => Settings(),
+  "/change/password": (BuildContext context) => ChangePassword(),
+  "/stats": (BuildContext context) => StatDashboard(),
 };

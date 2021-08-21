@@ -77,7 +77,7 @@ class SideDrawer extends HookWidget {
                       leading: Icon(Icons.description),
                       title: Text('Exercise History'),
                       onTap: () {
-                        Navigator.of(context).pushNamed("/sightings/own");
+                        Navigator.of(context).pushNamed("/exercise/history");
                       },
                     ),
                     ListTile(

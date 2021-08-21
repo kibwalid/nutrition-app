@@ -39,7 +39,7 @@ class Dashboard extends HookWidget {
                               height: size.height * 0.02,
                             ),
                             Text(
-                              "Good Morning, \n${snapshot.data.firstName}",
+                              "Good ${UserServices().greeting()}, \n${snapshot.data.firstName}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -111,10 +111,10 @@ class Dashboard extends HookWidget {
                                     },
                                   ),
                                   DashboardCard(
-                                    title: "Profile",
-                                    imgSrc: "assets/icons/sleep_timer.png",
+                                    title: "Fitness Statistics",
+                                    imgSrc: "assets/icons/stat.png",
                                     press: () {
-                                      Navigator.pushNamed(context, "/profile");
+                                      Navigator.pushNamed(context, "/stats");
                                     },
                                   ),
                                 ],

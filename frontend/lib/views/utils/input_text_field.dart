@@ -9,6 +9,8 @@ class InputTextField extends StatelessWidget {
     this.password = false,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.labelColor = Colors.grey,
+    this.underLineColor = Colors.grey,
   }) : super(key: key);
 
   final String label;
@@ -16,6 +18,8 @@ class InputTextField extends StatelessWidget {
   final Function validator;
   final bool password;
   final TextInputType keyboardType;
+  final Color labelColor;
+  final Color underLineColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class InputTextField extends StatelessWidget {
       cursorColor: Colors.grey,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.grey),
+        labelStyle: TextStyle(color: labelColor),
         border: UnderlineInputBorder(
             borderSide: BorderSide(
           color: primaryColor,
@@ -40,7 +44,7 @@ class InputTextField extends StatelessWidget {
         )),
         enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-          color: Colors.grey,
+          color: underLineColor,
           width: 0.5,
         )),
       ),

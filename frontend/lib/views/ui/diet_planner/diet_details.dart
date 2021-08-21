@@ -17,10 +17,13 @@ class DietDetails extends HookWidget {
     final dietPlan = context.read(dietPlanProvider);
 
     onload() async {
-      DietPlan dietPlan = await CalcServices().getActiveDietPlan(authInfo.state);
+      DietPlan dietPlan =
+          await CalcServices().getActiveDietPlan(authInfo.state);
 
-      List<Calorie> intake = await CalcServices().getAllCalorieIntake(authInfo.state, dietPlan.dietId);
-      List<Calorie> burn = await CalcServices().getAllCalorieBurned(authInfo.state, dietPlan.dietId);
+      List<Calorie> intake = await CalcServices()
+          .getAllCalorieIntake(authInfo.state, dietPlan.dietId);
+      List<Calorie> burn = await CalcServices()
+          .getAllCalorieBurned(authInfo.state, dietPlan.dietId);
       // List<Calorie> burnedList = await CalcServices()
       //     .getAllCalorieBurned(authInfo.state, dietPlan.dietId);
 
@@ -36,7 +39,7 @@ class DietDetails extends HookWidget {
       child: Stack(
         children: [
           Container(
-            height: size.height * 0.6,
+            height: size.height * 0.7,
             decoration: BoxDecoration(
               color: Color(0xFF4CC5AD),
             ),
@@ -51,8 +54,13 @@ class DietDetails extends HookWidget {
                   double burnQuota = 0.0;
                   double burned = 0;
                   double burnedPercent = 0;
+                  double intakeTotal = 0;
+                  double intakePercent = 0;
                   burn.forEach((element) {
                     burned += element.calorie;
+                  });
+                  intake.forEach((element) {
+                    intakeTotal += element.calorie;
                   });
                   if (dietPlan.weightNow > dietPlan.weightTarget) {
                     burnQuota = (dietPlan.caloriePerDay * 0.3);
@@ -60,6 +68,7 @@ class DietDetails extends HookWidget {
                     burnQuota = (dietPlan.caloriePerDay * 0.12);
                   }
                   burnedPercent = burned / burnQuota;
+                  intakePercent = intakeTotal / dietPlan.caloriePerDay;
                   return SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -74,8 +83,11 @@ class DietDetails extends HookWidget {
                             children: [
                               Text("Today"),
                               Text(
-                                DateFormat.yMMMMd('en_US').format(DateTime.now()),
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                DateFormat.yMMMMd('en_US')
+                                    .format(DateTime.now()),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -87,7 +99,10 @@ class DietDetails extends HookWidget {
                             children: [
                               Text(
                                 "Daily Calorie Burn Quota: ${(burnedPercent * 100).toStringAsFixed(2)}%",
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87),
                               )
                             ],
                           ),
@@ -102,6 +117,28 @@ class DietDetails extends HookWidget {
                             height: size.height * 0.04,
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Daily Calorie Intake Quota: ${(intakePercent * 100).toStringAsFixed(2)}%",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.04,
+                          ),
+                          LinearPercentIndicator(
+                            progressColor: Colors.green,
+                            percent: intakePercent,
+                          ),
+                          SizedBox(
+                            height: size.height * 0.04,
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Expanded(
@@ -109,7 +146,9 @@ class DietDetails extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.orangeAccent),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.orangeAccent),
                                       child: Image.network(
                                         "https://static.thenounproject.com/png/512375-200.png",
                                         scale: size.aspectRatio * 8,
@@ -138,7 +177,9 @@ class DietDetails extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.redAccent),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.redAccent),
                                       child: Image.network(
                                         "https://img.icons8.com/color/452/healthy-food-calories-calculator.png",
                                         scale: size.aspectRatio * 20,
@@ -183,10 +224,11 @@ class DietDetails extends HookWidget {
                                     ),
                                   ),
                                   Container(
-                                    height: size.height * 0.38,
+                                    height: size.height * 0.2,
                                     decoration: BoxDecoration(
                                       border: Border(
-                                        top: BorderSide(color: Colors.grey, width: 0.5),
+                                        top: BorderSide(
+                                            color: Colors.grey, width: 0.5),
                                       ),
                                     ),
                                     child: TabBarView(
@@ -195,12 +237,14 @@ class DietDetails extends HookWidget {
                                             itemCount: intake.length,
                                             itemBuilder: (context, index) {
                                               return Container(
-                                                margin: EdgeInsets.symmetric(vertical: 10),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10),
                                                 padding: EdgeInsets.all(10),
                                                 height: size.height * 0.1,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(13),
+                                                  borderRadius:
+                                                      BorderRadius.circular(13),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       offset: Offset(0, 17),
@@ -212,44 +256,68 @@ class DietDetails extends HookWidget {
                                                 ),
                                                 child: Row(
                                                   children: <Widget>[
-                                                    intake[index].type == "food" ? SizedBox(width: size.width * 0.012): SizedBox(),
+                                                    intake[index].type == "food"
+                                                        ? SizedBox(
+                                                            width: size.width *
+                                                                0.012)
+                                                        : SizedBox(),
                                                     Image.network(
                                                       () {
-                                                        if (intake[index].type == "water") {
+                                                        if (intake[index]
+                                                                .type ==
+                                                            "water") {
                                                           return "https://www.freepnglogos.com/uploads/water-glass-png/water-glass-icon-download-png-and-vector-29.png";
                                                         } else {
                                                           return "https://i.pinimg.com/originals/95/0d/1a/950d1aaefee57bcfe67e5b9d9cbb35ca.png";
                                                         }
                                                       }(),
-                                                      scale: intake[index].type == "water" ? size.aspectRatio * 30 : size.aspectRatio * 23,
+                                                      scale: intake[index]
+                                                                  .type ==
+                                                              "water"
+                                                          ? size.aspectRatio *
+                                                              30
+                                                          : size.aspectRatio *
+                                                              23,
                                                     ),
                                                     SizedBox(width: 20),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: <Widget>[
                                                           SizedBox(
-                                                            height: size.height * 0.01,
+                                                            height:
+                                                                size.height *
+                                                                    0.01,
                                                           ),
                                                           Text(
                                                             intake[index].name,
                                                             style: TextStyle(
                                                                 fontSize: 20,
                                                                 fontWeight:
-                                                                FontWeight.bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
                                                           SizedBox(
-                                                            height: size.height * 0.0012,
+                                                            height:
+                                                                size.height *
+                                                                    0.0012,
                                                           ),
-                                                          Text(intake[index].calorie
-                                                              .toString() +
+                                                          Text(intake[index]
+                                                                  .calorie
+                                                                  .toString() +
                                                               " KCal")
                                                         ],
                                                       ),
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm('en_US').format(intake[index].date)),
+                                                        Text(DateFormat.jm(
+                                                                'en_US')
+                                                            .format(
+                                                                intake[index]
+                                                                    .date)),
                                                       ],
                                                     )
                                                   ],
@@ -260,12 +328,14 @@ class DietDetails extends HookWidget {
                                             itemCount: burn.length,
                                             itemBuilder: (context, index) {
                                               return Container(
-                                                margin: EdgeInsets.symmetric(vertical: 10),
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10),
                                                 padding: EdgeInsets.all(10),
                                                 height: size.height * 0.08,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(13),
+                                                  borderRadius:
+                                                      BorderRadius.circular(13),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       offset: Offset(0, 17),
@@ -277,42 +347,59 @@ class DietDetails extends HookWidget {
                                                 ),
                                                 child: Row(
                                                   children: <Widget>[
-                                                    burn[index].type == "run" ? SizedBox(width: size.width * 0.012): SizedBox(width: size.width * 0.012),
+                                                    burn[index].type == "run"
+                                                        ? SizedBox(
+                                                            width: size.width *
+                                                                0.012)
+                                                        : SizedBox(
+                                                            width: size.width *
+                                                                0.012),
                                                     Image.network(
                                                       () {
-                                                        if (burn[index].type == "run"){
+                                                        if (burn[index].type ==
+                                                            "run") {
                                                           return "https://www.freepnglogos.com/uploads/running-png/running-icon-download-icons-35.png";
                                                         } else {
                                                           return "https://www.pngrepo.com/png/81526/512/exercise.png";
                                                         }
-
                                                       }(),
-                                                      scale: size.aspectRatio * 30,
+                                                      scale:
+                                                          size.aspectRatio * 30,
                                                     ),
                                                     SizedBox(width: 20),
                                                     Expanded(
                                                       child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: <Widget>[
                                                           Text(
                                                             burn[index].name,
                                                             style: TextStyle(
                                                                 fontSize: 20,
                                                                 fontWeight:
-                                                                FontWeight.bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
                                                           SizedBox(
-                                                            height: size.height * 0.0012,
+                                                            height:
+                                                                size.height *
+                                                                    0.0012,
                                                           ),
-                                                          Text(burn[index].calorie
-                                                              .toStringAsFixed(2) +
+                                                          Text(burn[index]
+                                                                  .calorie
+                                                                  .toStringAsFixed(
+                                                                      2) +
                                                               " KCal")
                                                         ],
                                                       ),
                                                     ),
                                                     Column(
                                                       children: [
-                                                        Text(DateFormat.jm('en_US').format(burn[index].date)),
+                                                        Text(DateFormat.jm(
+                                                                'en_US')
+                                                            .format(burn[index]
+                                                                .date)),
                                                       ],
                                                     )
                                                   ],
