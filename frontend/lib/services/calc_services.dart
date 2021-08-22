@@ -282,4 +282,14 @@ class CalcServices {
 
     return calories;
   }
+
+  Future<DietPlan> endDietPlan(DietPlan dietPlan) async {
+    Map<String, dynamic> response =
+        await Api().put(dietPlan.toJson(), "$API_URI/api/diet/end");
+    print(response);
+    if (response["message"] == null) {
+      return DietPlan.fromJson(response);
+    }
+    return null;
+  }
 }

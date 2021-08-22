@@ -26,6 +26,11 @@ public class DietPlanController {
         return dietPlanServices.addDietPlan(dietPlan);
     }
 
+    @PutMapping("/end")
+    public DietPlan endDietPlan(@RequestBody DietPlan dietPlan){
+        return dietPlanServices.endDietPlan(dietPlan);
+    }
+
     @GetMapping("/active/{userID}")
     public DietPlan getActiveDietPlan(@PathVariable int userID){
         return dietPlanServices.getActiveDietPlan(userID);

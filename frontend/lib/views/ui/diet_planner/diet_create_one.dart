@@ -20,7 +20,8 @@ class DietCreateOne extends HookWidget {
     final dietPlanState = context.read(dietPlanProvider);
     DietPlan dietPlan = DietPlan();
     onload() async {
-      UserInfo userInfo = await UserServices().getCurrentUserInfo(authInfo.state);
+      UserInfo userInfo =
+          await UserServices().getCurrentUserInfo(authInfo.state);
       return userInfo;
     }
 
@@ -49,7 +50,8 @@ class DietCreateOne extends HookWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   double bmi = ((snapshot.data.userWeight * 2.20462) /
-                          ((snapshot.data.userHeight * 12) * (snapshot.data.userHeight * 12))) *
+                          ((snapshot.data.userHeight * 12) *
+                              (snapshot.data.userHeight * 12))) *
                       705;
                   return SafeArea(
                     child: Padding(
@@ -59,7 +61,10 @@ class DietCreateOne extends HookWidget {
                         children: [
                           Text(
                             "Create Diet Plan",
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30),
                           ),
                           SizedBox(
                             height: size.height * 0.05,
@@ -71,7 +76,9 @@ class DietCreateOne extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.orangeAccent),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.orangeAccent),
                                       child: Icon(
                                         Icons.accessibility_new_outlined,
                                         color: Colors.white,
@@ -100,7 +107,9 @@ class DietCreateOne extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: primaryColor),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: primaryColor),
                                       child: Icon(
                                         Icons.local_fire_department_sharp,
                                         color: Colors.white,
@@ -130,7 +139,9 @@ class DietCreateOne extends HookWidget {
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.amberAccent),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.amberAccent),
                                       child: Icon(
                                         Icons.height,
                                         color: Colors.white,
@@ -175,7 +186,10 @@ class DietCreateOne extends HookWidget {
                           ),
                           Text(
                             "Fitness Target",
-                            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 20),
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20),
                           ),
                           SizedBox(
                             height: size.height * 0.02,
@@ -192,12 +206,18 @@ class DietCreateOne extends HookWidget {
                                   "1 Week",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                items: <String>['1 Week', '2 Week', '3 Week', '1 Month'].map((String value) {
+                                items: <String>[
+                                  '1 Week',
+                                  '2 Week',
+                                  '3 Week',
+                                  '1 Month'
+                                ].map((String value) {
                                   return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ));
                                 }).toList(),
                                 onChanged: (value) {
@@ -217,11 +237,27 @@ class DietCreateOne extends HookWidget {
                               ),
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  primary: fintesGoal.state == 1 ? Colors.white : Colors.blue,
-                                  backgroundColor: fintesGoal.state == 1 ? Colors.blue : Colors.white,
+                                  primary: fintesGoal.state == 1
+                                      ? Colors.white
+                                      : Colors.blue,
+                                  backgroundColor: fintesGoal.state == 1
+                                      ? Colors.blue
+                                      : Colors.white,
                                 ),
                                 onPressed: () {
-                                  fintesGoal.state = 1;
+                                  if (!(bmi < 19)) {
+                                    fintesGoal.state = 1;
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Row(
+                                        children: <Widget>[
+                                          Text(
+                                              "You are too underweight to lose weight")
+                                        ],
+                                      ),
+                                    ));
+                                  }
                                 },
                                 child: Text("Lose Weight"),
                               ),
@@ -230,8 +266,12 @@ class DietCreateOne extends HookWidget {
                               ),
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  primary: fintesGoal.state == 2 ? Colors.white : Colors.blue,
-                                  backgroundColor: fintesGoal.state == 2 ? Colors.blue : Colors.white,
+                                  primary: fintesGoal.state == 2
+                                      ? Colors.white
+                                      : Colors.blue,
+                                  backgroundColor: fintesGoal.state == 2
+                                      ? Colors.blue
+                                      : Colors.white,
                                 ),
                                 onPressed: () {
                                   fintesGoal.state = 2;
@@ -247,11 +287,27 @@ class DietCreateOne extends HookWidget {
                               ),
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  primary: fintesGoal.state == 3 ? Colors.white : Colors.blue,
-                                  backgroundColor: fintesGoal.state == 3 ? Colors.blue : Colors.white,
+                                  primary: fintesGoal.state == 3
+                                      ? Colors.white
+                                      : Colors.blue,
+                                  backgroundColor: fintesGoal.state == 3
+                                      ? Colors.blue
+                                      : Colors.white,
                                 ),
                                 onPressed: () {
-                                  fintesGoal.state = 3;
+                                  if ((bmi > 25)) {
+                                    fintesGoal.state = 3;
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Row(
+                                        children: <Widget>[
+                                          Text(
+                                              "You are too overweight to gain weight")
+                                        ],
+                                      ),
+                                    ));
+                                  }
                                 },
                                 child: Text("Gain Weight"),
                               ),
@@ -268,79 +324,122 @@ class DietCreateOne extends HookWidget {
                                 press: () async {
                                   dietPlan.dietId =
                                       "Diet_Of${authInfo.state.userId}_from_${DateTime.now().day}_${DateTime.now().month}";
-                                  dietPlan.startDate = DateTime.now().toString();
+                                  dietPlan.startDate =
+                                      DateTime.now().toString();
                                   if (fitnesDuration.state.contains("1 Week")) {
-                                    dietPlan.endDate = DateTime.now().add(Duration(days: 7)).toString();
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 7))
+                                        .toString();
                                     if (fintesGoal.state == 1) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight - 2;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 2;
                                     } else if (fintesGoal.state == 3) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight + 2;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 2;
                                     } else if (fintesGoal.state == 2) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
                                         content: Row(
-                                          children: <Widget>[Text("Please select a Fitness Goal")],
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
                                         ),
                                       ));
                                     }
-                                  } else if (fitnesDuration.state.contains("2 Week")) {
+                                  } else if (fitnesDuration.state
+                                      .contains("2 Week")) {
                                     if (fintesGoal.state == 1) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight - 4;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 4;
                                     } else if (fintesGoal.state == 3) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight + 4;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 4;
                                     } else if (fintesGoal.state == 2) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
                                         content: Row(
-                                          children: <Widget>[Text("Please select a Fitness Goal")],
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
                                         ),
                                       ));
                                     }
-                                    dietPlan.endDate = DateTime.now().add(Duration(days: 14)).toString();
-                                  } else if (fitnesDuration.state.contains("3 Week")) {
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 14))
+                                        .toString();
+                                  } else if (fitnesDuration.state
+                                      .contains("3 Week")) {
                                     if (fintesGoal.state == 1) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight - 6;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 6;
                                     } else if (fintesGoal.state == 3) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight + 6;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 6;
                                     } else if (fintesGoal.state == 2) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
                                         content: Row(
-                                          children: <Widget>[Text("Please select a Fitness Goal")],
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
                                         ),
                                       ));
                                     }
-                                    dietPlan.endDate = DateTime.now().add(Duration(days: 21)).toString();
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 21))
+                                        .toString();
                                   } else {
                                     if (fintesGoal.state == 1) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight - 6;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight - 6;
                                     } else if (fintesGoal.state == 3) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight + 6;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight + 6;
                                     } else if (fintesGoal.state == 2) {
-                                      dietPlan.weightTarget = snapshot.data.userWeight;
+                                      dietPlan.weightTarget =
+                                          snapshot.data.userWeight;
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
                                         content: Row(
-                                          children: <Widget>[Text("Please select a Fitness Goal")],
+                                          children: <Widget>[
+                                            Text("Please select a Fitness Goal")
+                                          ],
                                         ),
                                       ));
                                     }
-                                    dietPlan.endDate = DateTime.now().add(Duration(days: 30)).toString();
+                                    dietPlan.endDate = DateTime.now()
+                                        .add(Duration(days: 30))
+                                        .toString();
                                   }
                                   dietPlan.weightNow = snapshot.data.userWeight;
                                   dietPlan.status = 1;
-                                  dietPlan.userId = int.parse(authInfo.state.userId);
-                                  dietPlan.caloriePerDay = snapshot.data.userWeight * 0.9 * 24 * 0.95 * 1.55;
-                                  DietPlan dietPlanFromDB = await CalcServices().addDietPlan(dietPlan, authInfo.state);
+                                  dietPlan.userId =
+                                      int.parse(authInfo.state.userId);
+                                  dietPlan.caloriePerDay =
+                                      snapshot.data.userWeight *
+                                          0.9 *
+                                          24 *
+                                          0.95 *
+                                          1.55;
+                                  DietPlan dietPlanFromDB = await CalcServices()
+                                      .addDietPlan(dietPlan, authInfo.state);
                                   if (dietPlanFromDB == null) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: Row(
                                         children: <Widget>[
-                                          Text("Server Error: Cannot create Diet Plan")
+                                          Text(
+                                              "Server Error: Cannot create Diet Plan")
                                         ],
                                       ),
                                     ));

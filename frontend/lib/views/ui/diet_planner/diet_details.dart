@@ -3,18 +3,21 @@ import 'package:fitness/models/diet_plan.dart';
 import 'package:fitness/providers/user_provider.dart';
 import 'package:fitness/services/calc_services.dart';
 import 'package:fitness/views/utils/background.dart';
+import 'package:fitness/views/utils/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DietDetails extends HookWidget {
+  DietPlan diet = DietPlan();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final authInfo = context.read(authInfoProvider);
-    final dietPlan = context.read(dietPlanProvider);
+    final dietPlanState = context.read(dietPlanProvider);
 
     onload() async {
       DietPlan dietPlan =
@@ -49,6 +52,7 @@ class DietDetails extends HookWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   DietPlan dietPlan = snapshot.data['diet'];
+                  diet = dietPlan;
                   List<Calorie> intake = snapshot.data['intake'];
                   List<Calorie> burn = snapshot.data['burn'];
                   double burnQuota = 0.0;
@@ -426,7 +430,23 @@ class DietDetails extends HookWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-              })
+              }),
+          Positioned(
+              right: 10,
+              top: size.height * 0.11,
+              child: Container(
+                width: size.width * 0.3,
+                child: RoundedButton(
+                  color: Colors.redAccent,
+                  text: "End Diet",
+                  press: () async {
+                    DietPlan response = await CalcServices().endDietPlan(diet);
+                    if (response != null) {
+                      Navigator.popAndPushNamed(context, "/dashboard");
+                    }
+                  },
+                ),
+              ))
         ],
       ),
     );

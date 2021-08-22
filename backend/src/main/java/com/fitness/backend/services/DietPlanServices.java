@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -41,4 +42,16 @@ public class DietPlanServices {
     }
 
 
+    public DietPlan endDietPlan(DietPlan dietPlan) {
+        Optional<DietPlan> dietPlanFromDB = dietPlannerRepository.findById(dietPlan.getId());
+        if(dietPlanFromDB.isEmpty()){
+            throw new AppException("Cannot find diet", HttpStatus.NOT_FOUND);
+        }
+        try{
+            dietPlanFromDB.get().setStatus(0);
+            return dietPlannerRepository.save(dietPlanFromDB.get());
+        } catch (Exception e){
+            throw new AppException("Server Error", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
 }
